@@ -140,14 +140,18 @@ function WebXRManager( renderer, gl ) {
 			session.addEventListener( 'end', onSessionEnd );
 
 			// eslint-disable-next-line no-undef
-			session.updateRenderState( { baseLayer: new XRWebGLLayer( session, gl,
-				{
-					antialias: gl.getContextAttributes().antialias,
-					alpha: gl.getContextAttributes().alpha,
-					depth: gl.getContextAttributes().depth,
-					stencil: gl.getContextAttributes().stencil
-				}
-			) } );
+			session.updateRenderState( {
+				depthNear: cameraVR.near,
+				depthFar: cameraVR.far,
+				baseLayer: new XRWebGLLayer( session, gl,
+					{
+						antialias: gl.getContextAttributes().antialias,
+						alpha: gl.getContextAttributes().alpha,
+						depth: gl.getContextAttributes().depth,
+						stencil: gl.getContextAttributes().stencil
+					}
+				)
+			} );
 
 			session.requestReferenceSpace( referenceSpaceType ).then( onRequestReferenceSpace );
 
@@ -208,6 +212,13 @@ function WebXRManager( renderer, gl ) {
 	this.setPoseTarget = function ( object ) {
 
 		if ( object !== undefined ) poseTarget = object;
+
+	};
+
+	this.setCameraClipping = function ( camera ) {
+
+		cameraVR.near = cameraR.near = cameraL.near = camera.near;
+		cameraVR.far = cameraR.far = cameraL.far = camera.far;
 
 	};
 
