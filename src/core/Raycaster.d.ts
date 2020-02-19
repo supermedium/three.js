@@ -14,11 +14,12 @@ export interface Intersection {
 	faceIndex?: number;
 	object: Object3D;
 	uv?: Vector2;
+	instanceId?: number;
 }
 
 export interface RaycasterParameters {
 	Mesh?: any;
-	Line?: any;
+	Line?: { threshold: number };
 	LOD?: any;
 	Points?: { threshold: number };
 	Sprite?: any;
@@ -62,11 +63,6 @@ export class Raycaster {
 	camera: Camera;
 
 	params: RaycasterParameters;
-
-	/**
-	 * The precision factor of the raycaster when intersecting Line objects.
-	 */
-	linePrecision: number;
 
 	/**
 	 * Updates the ray with a new origin and direction.

@@ -35,13 +35,14 @@ void main() {
 	#include <color_fragment>
 	#include <alphamap_fragment>
 	#include <alphatest_fragment>
+	#include <transparent_fragment>
 	#include <specularmap_fragment>
 
 	ReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );
 
 	// accumulation (baked indirect lighting only)
 	#ifdef USE_LIGHTMAP
-	
+
 		vec4 lightMapTexel= texture2D( lightMap, vUv2 );
 		reflectedLight.indirectDiffuse += lightMapTexelToLinear( lightMapTexel ).rgb * lightMapIntensity;
 
@@ -62,10 +63,10 @@ void main() {
 
 	gl_FragColor = vec4( outgoingLight, diffuseColor.a );
 
-	#include <premultiplied_alpha_fragment>
 	#include <tonemapping_fragment>
 	#include <encodings_fragment>
 	#include <fog_fragment>
+	#include <premultiplied_alpha_fragment>
 
 }
 `;
