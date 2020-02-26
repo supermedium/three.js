@@ -14,9 +14,13 @@ var Config = function () {
 		'project/title': '',
 		'project/editable': false,
 
-		'project/renderer': 'WebGLRenderer',
 		'project/renderer/antialias': true,
 		'project/renderer/shadows': true,
+		'project/renderer/shadowType': 1, // PCF
+		'project/renderer/physicallyCorrectLights': false,
+		'project/renderer/toneMapping': 1, // linear
+		'project/renderer/toneMappingExposure': 1,
+		'project/renderer/toneMappingWhitePoint': 1,
 
 		'project/vr': false,
 
@@ -76,3 +80,5 @@ var Config = function () {
 	};
 
 };
+
+export { Config };

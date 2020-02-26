@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<base href="../../" />
+		<base href="../../../" />
 		<script src="list.js"></script>
 		<script src="page.js"></script>
 		<link type="text/css" rel="stylesheet" href="page.css" />
@@ -16,10 +16,11 @@
 
 
 		<h2>Example</h2>
-		<code>var lut = new THREE.Lut( "rainbow", 512 );</code>
-		<code>var data = [0, 10.1, 4.2, 3.4, 63, 28];</code>
-		<code>lut.setMax(63);</code>
-		<code>color = lut.getColor(10);</code>
+
+		<code>
+		var lut = new THREE.Lut( 'rainbow', 512 );
+		var color = lut.getColor( 0.5 );
+		</code>
 
 		<h2>Constructor</h2>
 
