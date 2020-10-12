@@ -67,8 +67,8 @@ class WebXRManager extends EventDispatcher {
 		let _currentDepthFar = null;
 
 		//
-
 		this.cameraAutoUpdate = true;
+		this.layersEnabled = false;
 		this.enabled = false;
 
 		this.isPresenting = false;
@@ -381,8 +381,29 @@ class WebXRManager extends EventDispatcher {
 				return session.environmentBlendMode;
 
 			}
+		}
 
-		};
+		this.addLayer = function(layer) {
+			if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
+
+			layers.push( layer );
+			this.updateLayers();
+		}
+
+		this.removeLayer = function(layer) {
+
+			layers.splice( layers.indexOf(layer), 1 );
+			if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
+
+			this.updateLayers();
+		}
+
+		this.updateLayers = function() {
+			var layersCopy = layers.map(function (x) { return x; });
+
+			layersCopy.unshift( session.renderState.layers[0] );
+			session.updateRenderState( { layers: layersCopy } );
+		}
 
 		this.getDepthTexture = function () {
 
