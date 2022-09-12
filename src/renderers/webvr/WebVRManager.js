@@ -14,7 +14,7 @@ import { PerspectiveCamera } from '../../cameras/PerspectiveCamera.js';
 import { WebGLAnimation } from '../webgl/WebGLAnimation.js';
 import { setProjectionFromUnion } from './WebVRUtils.js';
 
-function WebVRManager ( renderer ) {
+function WebVRManager( renderer ) {
 
 	var renderWidth, renderHeight;
 	var scope = this;
@@ -276,9 +276,9 @@ function WebVRManager ( renderer ) {
 	};
 
 	//
-    
-	this.cameraAutoUpdate = true
-    
+
+	this.cameraAutoUpdate = true;
+
 	this.updateCamera = function ( camera ) {
 
 		var userHeight = referenceSpaceType === 'local-floor' ? 1.6 : 0;
@@ -399,28 +399,34 @@ function WebVRManager ( renderer ) {
 
 		return cameraVR;
 
-	}; 
-    
+	};
+
 	this.getCamera = function () {
 
 		return cameraVR;
 
 	};
-    
+
 	// Dummy getFoveation/setFoveation to have the same API as WebXR
 
 	this.getFoveation = function () {
+
 		return 1;
+
 	};
-    
+
 	this.setFoveation = function ( foveation ) {
-		if ( foveation !== 1) {
+
+		if ( foveation !== 1 ) {
+
 			console.warn( 'THREE.WebVRManager: setFoveation() not used in WebVR.' );
+
 		}
+
 	};
-    
+
 	//
-    
+
 	this.getStandingMatrix = function () {
 
 		return standingMatrix;
@@ -467,11 +473,11 @@ function WebVRManager ( renderer ) {
 
 }
 
-Object.assign(WebVRManager.prototype, {
-	addEventListener: EventDispatcher.prototype['addEventListener'],
-	hasEventListener: EventDispatcher.prototype['hasEventListener'],
-	removeEventListener: EventDispatcher.prototype['removeEventListener'],
-	dispatchEvent: EventDispatcher.prototype['dispatchEvent']
-});
+Object.assign( WebVRManager.prototype, {
+	addEventListener: EventDispatcher.prototype[ 'addEventListener' ],
+	hasEventListener: EventDispatcher.prototype[ 'hasEventListener' ],
+	removeEventListener: EventDispatcher.prototype[ 'removeEventListener' ],
+	dispatchEvent: EventDispatcher.prototype[ 'dispatchEvent' ]
+} );
 
 export { WebVRManager };
