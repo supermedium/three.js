@@ -275,7 +275,11 @@ function WebVRManager ( renderer ) {
 
 	};
 
-	this.getCamera = function ( camera ) {
+    //
+    
+    this.cameraAutoUpdate = true
+    
+    this.updateCamera = function ( camera ) {
 
 		var userHeight = referenceSpaceType === 'local-floor' ? 1.6 : 0;
 
@@ -348,7 +352,7 @@ function WebVRManager ( renderer ) {
 
 		// TODO (mrdoob) Double check this code
 
-		standingMatrixInverse.getInverse( standingMatrix );
+        standingMatrixInverse.copy( standingMatrix ).invert();
 
 		if ( referenceSpaceType === 'local-floor' ) {
 
@@ -361,7 +365,7 @@ function WebVRManager ( renderer ) {
 
 		if ( parent !== null ) {
 
-			matrixWorldInverse.getInverse( parent.matrixWorld );
+            matrixWorldInverse.copy( parent.matrixWorld ).invert();
 
 			cameraL.matrixWorldInverse.multiply( matrixWorldInverse );
 			cameraR.matrixWorldInverse.multiply( matrixWorldInverse );
@@ -370,9 +374,9 @@ function WebVRManager ( renderer ) {
 
 		// envMap and Mirror needs camera.matrixWorld
 
-		cameraL.matrixWorld.getInverse( cameraL.matrixWorldInverse );
-		cameraR.matrixWorld.getInverse( cameraR.matrixWorldInverse );
-
+        cameraL.matrixWorld.copy( cameraL.matrixWorldInverse ).invert();
+        cameraR.matrixWorld.copy( cameraR.matrixWorldInverse ).invert();
+        
 		cameraL.projectionMatrix.fromArray( frameData.leftProjectionMatrix );
 		cameraR.projectionMatrix.fromArray( frameData.rightProjectionMatrix );
 
@@ -395,7 +399,33 @@ function WebVRManager ( renderer ) {
 
 		return cameraVR;
 
+	}; 
+    
+    this.getCamera = function () {
+
+        return cameraVR;
+
+    };
+    
+    // Dummy to fix Firefox
+    
+    this.getFoveation = function () {
+        console.warn( 'THREE.WebVRManager: getFoveation() not used in WEBVR.' );
+    };
+    
+    this.setFoveation = function ( foveation ) {
+        console.warn( 'THREE.WebVRManager: setFoveation() not used in WEBVR.' );
+    };
+    
+    //
+    
+	this.getStandingMatrix = function () {
+
+		return standingMatrix;
+
 	};
+
+	this.isPresenting = false;
 
 	this.getStandingMatrix = function () {
 
