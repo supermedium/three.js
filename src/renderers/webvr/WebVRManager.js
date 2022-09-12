@@ -474,10 +474,10 @@ function WebVRManager( renderer ) {
 }
 
 Object.assign( WebVRManager.prototype, {
-	addEventListener: EventDispatcher.prototype[ 'addEventListener' ],
-	hasEventListener: EventDispatcher.prototype[ 'hasEventListener' ],
-	removeEventListener: EventDispatcher.prototype[ 'removeEventListener' ],
-	dispatchEvent: EventDispatcher.prototype[ 'dispatchEvent' ]
+	addEventListener: EventDispatcher.prototype.addEventListener,
+	hasEventListener: EventDispatcher.prototype.hasEventListener,
+	removeEventListener: EventDispatcher.prototype.removeEventListener,
+	dispatchEvent: EventDispatcher.prototype.dispatchEvent
 } );
 
 export { WebVRManager };
