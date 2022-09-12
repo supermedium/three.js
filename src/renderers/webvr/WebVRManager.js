@@ -14,7 +14,7 @@ import { PerspectiveCamera } from '../../cameras/PerspectiveCamera.js';
 import { WebGLAnimation } from '../webgl/WebGLAnimation.js';
 import { setProjectionFromUnion } from './WebVRUtils.js';
 
-function WebVRManager ( renderer ) {
+function WebVRManager( renderer ) {
 
 	var renderWidth, renderHeight;
 	var scope = this;
@@ -275,7 +275,11 @@ function WebVRManager ( renderer ) {
 
 	};
 
-	this.getCamera = function ( camera ) {
+	//
+
+	this.cameraAutoUpdate = true;
+
+	this.updateCamera = function ( camera ) {
 
 		var userHeight = referenceSpaceType === 'local-floor' ? 1.6 : 0;
 
@@ -348,7 +352,7 @@ function WebVRManager ( renderer ) {
 
 		// TODO (mrdoob) Double check this code
 
-		standingMatrixInverse.getInverse( standingMatrix );
+		standingMatrixInverse.copy( standingMatrix ).invert();
 
 		if ( referenceSpaceType === 'local-floor' ) {
 
@@ -361,7 +365,7 @@ function WebVRManager ( renderer ) {
 
 		if ( parent !== null ) {
 
-			matrixWorldInverse.getInverse( parent.matrixWorld );
+			matrixWorldInverse.copy( parent.matrixWorld ).invert();
 
 			cameraL.matrixWorldInverse.multiply( matrixWorldInverse );
 			cameraR.matrixWorldInverse.multiply( matrixWorldInverse );
@@ -370,8 +374,8 @@ function WebVRManager ( renderer ) {
 
 		// envMap and Mirror needs camera.matrixWorld
 
-		cameraL.matrixWorld.getInverse( cameraL.matrixWorldInverse );
-		cameraR.matrixWorld.getInverse( cameraR.matrixWorldInverse );
+		cameraL.matrixWorld.copy( cameraL.matrixWorldInverse ).invert();
+		cameraR.matrixWorld.copy( cameraR.matrixWorldInverse ).invert();
 
 		cameraL.projectionMatrix.fromArray( frameData.leftProjectionMatrix );
 		cameraR.projectionMatrix.fromArray( frameData.rightProjectionMatrix );
@@ -396,6 +400,32 @@ function WebVRManager ( renderer ) {
 		return cameraVR;
 
 	};
+
+	this.getCamera = function () {
+
+		return cameraVR;
+
+	};
+
+	// Dummy getFoveation/setFoveation to have the same API as WebXR
+
+	this.getFoveation = function () {
+
+		return 1;
+
+	};
+
+	this.setFoveation = function ( foveation ) {
+
+		if ( foveation !== 1 ) {
+
+			console.warn( 'THREE.WebVRManager: setFoveation() not used in WebVR.' );
+
+		}
+
+	};
+
+	//
 
 	this.getStandingMatrix = function () {
 
@@ -441,10 +471,13 @@ function WebVRManager ( renderer ) {
 
 	};
 
-	this.addEventListener = function () { /* Stub */ }
-
 }
 
-Object.assign( WebVRManager.prototype, EventDispatcher.prototype );
+Object.assign( WebVRManager.prototype, {
+	addEventListener: EventDispatcher.prototype.addEventListener,
+	hasEventListener: EventDispatcher.prototype.hasEventListener,
+	removeEventListener: EventDispatcher.prototype.removeEventListener,
+	dispatchEvent: EventDispatcher.prototype.dispatchEvent
+} );
 
 export { WebVRManager };
