@@ -275,11 +275,11 @@ function WebVRManager ( renderer ) {
 
 	};
 
-    //
+	//
     
-    this.cameraAutoUpdate = true
+	this.cameraAutoUpdate = true
     
-    this.updateCamera = function ( camera ) {
+	this.updateCamera = function ( camera ) {
 
 		var userHeight = referenceSpaceType === 'local-floor' ? 1.6 : 0;
 
@@ -352,7 +352,7 @@ function WebVRManager ( renderer ) {
 
 		// TODO (mrdoob) Double check this code
 
-        standingMatrixInverse.copy( standingMatrix ).invert();
+		standingMatrixInverse.copy( standingMatrix ).invert();
 
 		if ( referenceSpaceType === 'local-floor' ) {
 
@@ -365,7 +365,7 @@ function WebVRManager ( renderer ) {
 
 		if ( parent !== null ) {
 
-            matrixWorldInverse.copy( parent.matrixWorld ).invert();
+			matrixWorldInverse.copy( parent.matrixWorld ).invert();
 
 			cameraL.matrixWorldInverse.multiply( matrixWorldInverse );
 			cameraR.matrixWorldInverse.multiply( matrixWorldInverse );
@@ -374,9 +374,9 @@ function WebVRManager ( renderer ) {
 
 		// envMap and Mirror needs camera.matrixWorld
 
-        cameraL.matrixWorld.copy( cameraL.matrixWorldInverse ).invert();
-        cameraR.matrixWorld.copy( cameraR.matrixWorldInverse ).invert();
-        
+		cameraL.matrixWorld.copy( cameraL.matrixWorldInverse ).invert();
+		cameraR.matrixWorld.copy( cameraR.matrixWorldInverse ).invert();
+
 		cameraL.projectionMatrix.fromArray( frameData.leftProjectionMatrix );
 		cameraR.projectionMatrix.fromArray( frameData.rightProjectionMatrix );
 
@@ -401,32 +401,26 @@ function WebVRManager ( renderer ) {
 
 	}; 
     
-    this.getCamera = function () {
+	this.getCamera = function () {
 
-        return cameraVR;
-
-    };
-    
-    // Dummy to fix Firefox
-    
-    this.getFoveation = function () {
-        console.warn( 'THREE.WebVRManager: getFoveation() not used in WEBVR.' );
-    };
-    
-    this.setFoveation = function ( foveation ) {
-        console.warn( 'THREE.WebVRManager: setFoveation() not used in WEBVR.' );
-    };
-    
-    //
-    
-	this.getStandingMatrix = function () {
-
-		return standingMatrix;
+		return cameraVR;
 
 	};
+    
+	// Dummy getFoveation/setFoveation to have the same API as WebXR
 
-	this.isPresenting = false;
-
+	this.getFoveation = function () {
+		return 1;
+	};
+    
+	this.setFoveation = function ( foveation ) {
+		if ( foveation !== 1) {
+			console.warn( 'THREE.WebVRManager: setFoveation() not used in WebVR.' );
+		}
+	};
+    
+	//
+    
 	this.getStandingMatrix = function () {
 
 		return standingMatrix;
@@ -471,10 +465,13 @@ function WebVRManager ( renderer ) {
 
 	};
 
-	this.addEventListener = function () { /* Stub */ }
-
 }
 
-Object.assign( WebVRManager.prototype, EventDispatcher.prototype );
+Object.assign(WebVRManager.prototype, {
+	addEventListener: EventDispatcher.prototype['addEventListener'],
+	hasEventListener: EventDispatcher.prototype['hasEventListener'],
+	removeEventListener: EventDispatcher.prototype['removeEventListener'],
+	dispatchEvent: EventDispatcher.prototype['dispatchEvent']
+});
 
 export { WebVRManager };
