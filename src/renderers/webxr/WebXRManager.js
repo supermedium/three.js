@@ -373,9 +373,9 @@ class WebXRManager extends EventDispatcher {
 		};
 
 		this.removeLayer = function(layer) {
+			layers.splice( layers.indexOf(layer), 1 );
 		 	if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
 		  
-		 	layers.splice( layers.indexOf(layer), 1 );
 		 	this.updateLayers();
 		};
 
