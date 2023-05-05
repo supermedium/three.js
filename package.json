@@ -1,6 +1,6 @@
 {
-  "name": "three",
-  "version": "0.156.1",
+  "name": "super-three",
+  "version": "0.156.0",
   "description": "JavaScript 3D library",
   "type": "module",
   "main": "./build/three.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mrdoob/three.js"
+    "url": "supermedium/three.js"
   },
   "sideEffects": false,
   "files": [
