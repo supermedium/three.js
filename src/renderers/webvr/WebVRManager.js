@@ -425,6 +425,18 @@ function WebVRManager( renderer ) {
 
 	};
 
+	// Dummy getEnvironmentBlendMode to have the same API as WebXR
+
+	this.getEnvironmentBlendMode = function () {
+
+		if ( scope.isPresenting ) {
+
+			return 'opaque';
+
+		}
+
+	};
+
 	//
 
 	this.getStandingMatrix = function () {
