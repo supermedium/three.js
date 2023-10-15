@@ -1,9 +1,10 @@
-import { BackSide, DoubleSide, CubeUVReflectionMapping, ObjectSpaceNormalMap, TangentSpaceNormalMap, NoToneMapping, NormalBlending, LinearSRGBColorSpace, SRGBColorSpace } from '../../constants.js';
+import { BackSide, CubeUVReflectionMapping, DoubleSide, LinearSRGBColorSpace, NoToneMapping, NormalBlending, ObjectSpaceNormalMap, SRGBColorSpace, TangentSpaceNormalMap } from '../../constants.js';
+
 import { Layers } from '../../core/Layers.js';
-import { WebGLProgram } from './WebGLProgram.js';
-import { WebGLShaderCache } from './WebGLShaderCache.js';
 import { ShaderLib } from '../shaders/ShaderLib.js';
 import { UniformsUtils } from '../shaders/UniformsUtils.js';
+import { WebGLProgram } from './WebGLProgram.js';
+import { WebGLShaderCache } from './WebGLShaderCache.js';
 
 function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities, bindingStates, clipping ) {
 
@@ -106,6 +107,8 @@ function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities
 
 		const currentRenderTarget = renderer.getRenderTarget();
 
+		const numMultiviewViews = currentRenderTarget && currentRenderTarget.isWebGLMultiviewRenderTarget ? currentRenderTarget.numViews : 0;
+
 		const IS_INSTANCEDMESH = object.isInstancedMesh === true;
 
 		const HAS_MAP = !! material.map;
@@ -196,6 +199,7 @@ function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities
 			instancingColor: IS_INSTANCEDMESH && object.instanceColor !== null,
 
 			supportsVertexTextures: SUPPORTS_VERTEX_TEXTURES,
+			numMultiviewViews: numMultiviewViews,
 			outputColorSpace: ( currentRenderTarget === null ) ? renderer.outputColorSpace : ( currentRenderTarget.isXRRenderTarget === true ? currentRenderTarget.texture.colorSpace : LinearSRGBColorSpace ),
 
 			map: HAS_MAP,
@@ -540,6 +544,8 @@ function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities
 			_programLayers.enable( 18 );
 		if ( parameters.decodeVideoTexture )
 			_programLayers.enable( 19 );
+		if ( parameters.numMultiviewViews )
+			_programLayers.enable( 20 );
 
 		array.push( _programLayers.mask );
 

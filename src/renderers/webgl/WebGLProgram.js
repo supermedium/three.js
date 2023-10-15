@@ -1,7 +1,8 @@
-import { WebGLUniforms } from './WebGLUniforms.js';
-import { WebGLShader } from './WebGLShader.js';
+import { ACESFilmicToneMapping, AddOperation, CineonToneMapping, CubeReflectionMapping, CubeRefractionMapping, CubeUVReflectionMapping, CustomToneMapping, GLSL3, LinearSRGBColorSpace, LinearToneMapping, MixOperation, MultiplyOperation, NoToneMapping, PCFShadowMap, PCFSoftShadowMap, ReinhardToneMapping, SRGBColorSpace, VSMShadowMap } from '../../constants.js';
+
 import { ShaderChunk } from '../shaders/ShaderChunk.js';
-import { NoToneMapping, AddOperation, MixOperation, MultiplyOperation, CubeRefractionMapping, CubeUVReflectionMapping, CubeReflectionMapping, PCFSoftShadowMap, PCFShadowMap, VSMShadowMap, ACESFilmicToneMapping, CineonToneMapping, CustomToneMapping, ReinhardToneMapping, LinearToneMapping, GLSL3, LinearSRGBColorSpace, SRGBColorSpace } from '../../constants.js';
+import { WebGLShader } from './WebGLShader.js';
+import { WebGLUniforms } from './WebGLUniforms.js';
 
 let programIdCount = 0;
 
@@ -431,6 +432,8 @@ function WebGLProgram( renderer, cacheKey, parameters, bindingStates ) {
 	let prefixVertex, prefixFragment;
 	let versionString = parameters.glslVersion ? '#version ' + parameters.glslVersion + '\n' : '';
 
+	const numMultiviewViews = parameters.numMultiviewViews;
+
 	if ( parameters.isRawShaderMaterial ) {
 
 		prefixVertex = [
@@ -832,6 +835,53 @@ function WebGLProgram( renderer, cacheKey, parameters, bindingStates ) {
 			'#define textureCubeGradEXT textureGrad'
 		].join( '\n' ) + '\n' + prefixFragment;
 
+		// Multiview
+
+		if ( numMultiviewViews > 0 ) {
+
+			// TODO: fix light transforms here?
+
+			prefixVertex = 	[
+				'#extension GL_OVR_multiview : require',
+				'layout(num_views = ' + numMultiviewViews + ') in;',
+				'#define VIEW_ID gl_ViewID_OVR'
+			].join( '\n' ) + '\n' + prefixVertex;
+
+			prefixVertex = prefixVertex.replace(
+				[
+					'uniform mat4 modelViewMatrix;',
+					'uniform mat4 projectionMatrix;',
+					'uniform mat4 viewMatrix;',
+					'uniform mat3 normalMatrix;'
+				].join( '\n' ),
+				[
+					'uniform mat4 modelViewMatrices[' + numMultiviewViews + '];',
+					'uniform mat4 projectionMatrices[' + numMultiviewViews + '];',
+					'uniform mat4 viewMatrices[' + numMultiviewViews + '];',
+					'uniform mat3 normalMatrices[' + numMultiviewViews + '];',
+
+					'#define modelViewMatrix modelViewMatrices[VIEW_ID]',
+					'#define projectionMatrix projectionMatrices[VIEW_ID]',
+					'#define viewMatrix viewMatrices[VIEW_ID]',
+					'#define normalMatrix normalMatrices[VIEW_ID]'
+				].join( '\n' )
+			);
+
+			prefixFragment = [
+				'#extension GL_OVR_multiview : require',
+				'#define VIEW_ID gl_ViewID_OVR'
+			].join( '\n' ) + '\n' + prefixFragment;
+
+			prefixFragment = prefixFragment.replace(
+				'uniform mat4 viewMatrix;',
+				[
+					'uniform mat4 viewMatrices[' + numMultiviewViews + '];',
+					'#define viewMatrix viewMatrices[VIEW_ID]'
+				].join( '\n' )
+			);
+
+		}
+
 	}
 
 	const vertexGlsl = versionString + prefixVertex + vertexShader;
@@ -996,6 +1046,7 @@ function WebGLProgram( renderer, cacheKey, parameters, bindingStates ) {
 	this.program = program;
 	this.vertexShader = glVertexShader;
 	this.fragmentShader = glFragmentShader;
+	this.numMultiviewViews = numMultiviewViews;
 
 	return this;
 

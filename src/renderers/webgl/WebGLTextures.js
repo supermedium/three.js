@@ -1,5 +1,7 @@
-import { LinearFilter, LinearMipmapLinearFilter, LinearMipmapNearestFilter, NearestFilter, NearestMipmapLinearFilter, NearestMipmapNearestFilter, RGBAFormat, DepthFormat, DepthStencilFormat, UnsignedShortType, UnsignedIntType, UnsignedInt248Type, FloatType, HalfFloatType, MirroredRepeatWrapping, ClampToEdgeWrapping, RepeatWrapping, UnsignedByteType, _SRGBAFormat, NoColorSpace, LinearSRGBColorSpace, SRGBColorSpace, NeverCompare, AlwaysCompare, LessCompare, LessEqualCompare, EqualCompare, GreaterEqualCompare, GreaterCompare, NotEqualCompare, DisplayP3ColorSpace } from '../../constants.js';
 import * as MathUtils from '../../math/MathUtils.js';
+
+import { AlwaysCompare, ClampToEdgeWrapping, DepthFormat, DepthStencilFormat, DisplayP3ColorSpace, EqualCompare, FloatType, GreaterCompare, GreaterEqualCompare, HalfFloatType, LessCompare, LessEqualCompare, LinearFilter, LinearMipmapLinearFilter, LinearMipmapNearestFilter, LinearSRGBColorSpace, MirroredRepeatWrapping, NearestFilter, NearestMipmapLinearFilter, NearestMipmapNearestFilter, NeverCompare, NoColorSpace, NotEqualCompare, RGBAFormat, RepeatWrapping, SRGBColorSpace, UnsignedByteType, UnsignedInt248Type, UnsignedIntType, UnsignedShortType, _SRGBAFormat } from '../../constants.js';
+
 import { ImageUtils } from '../../extras/ImageUtils.js';
 import { createElementNS } from '../../utils.js';
 
@@ -12,11 +14,14 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 	const maxSamples = capabilities.maxSamples;
 	const multisampledRTTExt = extensions.has( 'WEBGL_multisampled_render_to_texture' ) ? extensions.get( 'WEBGL_multisampled_render_to_texture' ) : null;
 	const supportsInvalidateFramebuffer = typeof navigator === 'undefined' ? false : /OculusBrowser/g.test( navigator.userAgent );
+	const multiviewExt = extensions.has( 'OCULUS_multiview' ) ? extensions.get( 'OCULUS_multiview' ) : null;
 
 	const _videoTextures = new WeakMap();
 	let _canvas;
 
 	const _sources = new WeakMap(); // maps WebglTexture objects to instances of Source
+
+	let _deferredUploads = [];
 
 	// cordova iOS (as of 5.0) still uses UIWebView, which provides OffscreenCanvas,
 	// also OffscreenCanvas.getContext("webgl"), but not OffscreenCanvas.getContext("2d")!
@@ -483,8 +488,11 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			} else {
 
-				uploadTexture( textureProperties, texture, slot );
-				return;
+				if ( this.uploadTexture( textureProperties, texture, slot ) ) {
+
+					return;
+
+				}
 
 			}
 
@@ -500,7 +508,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		if ( texture.version > 0 && textureProperties.__version !== texture.version ) {
 
-			uploadTexture( textureProperties, texture, slot );
+			this.uploadTexture( textureProperties, texture, slot );
 			return;
 
 		}
@@ -573,7 +581,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 			_gl.texParameteri( textureType, _gl.TEXTURE_WRAP_S, wrappingToGL[ texture.wrapS ] );
 			_gl.texParameteri( textureType, _gl.TEXTURE_WRAP_T, wrappingToGL[ texture.wrapT ] );
 
-			if ( textureType === _gl.TEXTURE_3D || textureType === _gl.TEXTURE_2D_ARRAY ) {
+			if ( ( textureType === _gl.TEXTURE_3D || textureType === _gl.TEXTURE_2D_ARRAY ) && texture.wrapR !== undefined ) {
 
 				_gl.texParameteri( textureType, _gl.TEXTURE_WRAP_R, wrappingToGL[ texture.wrapR ] );
 
@@ -717,7 +725,38 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 	}
 
+	function runDeferredUploads() {
+
+		const previousDeferSetting = this.deferTextureUploads;
+		this.deferTextureUploads = false;
+
+		for ( const upload of _deferredUploads ) {
+
+			this.uploadTexture( upload.textureProperties, upload.texture, upload.slot );
+			upload.texture.isPendingDeferredUpload = false;
+
+		}
+
+		_deferredUploads = [];
+
+		this.deferTextureUploads = previousDeferSetting;
+
+	}
+
 	function uploadTexture( textureProperties, texture, slot ) {
+
+		if ( this.deferTextureUploads ) {
+
+			if ( ! texture.isPendingDeferredUpload ) {
+
+				texture.isPendingDeferredUpload = true;
+				_deferredUploads.push( { textureProperties: textureProperties, texture: texture, slot: slot } );
+
+			}
+
+			return false;
+
+		}
 
 		let textureType = _gl.TEXTURE_2D;
 
@@ -1131,6 +1170,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 		}
 
 		textureProperties.__version = texture.version;
+		return true;
 
 	}
 
@@ -1356,7 +1396,11 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 			const width = Math.max( 1, renderTarget.width >> level );
 			const height = Math.max( 1, renderTarget.height >> level );
 
-			if ( textureTarget === _gl.TEXTURE_3D || textureTarget === _gl.TEXTURE_2D_ARRAY ) {
+			if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+				state.texStorage3D( _gl.TEXTURE_2D_ARRAY, 0, glInternalFormat, renderTarget.width, renderTarget.height, renderTarget.numViews );
+
+			} else if ( textureTarget === _gl.TEXTURE_3D || textureTarget === _gl.TEXTURE_2D_ARRAY ) {
 
 				state.texImage3D( textureTarget, level, glInternalFormat, width, height, renderTarget.depth, 0, glFormat, glType, null );
 
@@ -1370,13 +1414,31 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		state.bindFramebuffer( _gl.FRAMEBUFFER, framebuffer );
 
-		if ( useMultisampledRTT( renderTarget ) ) {
+		const multisampled = useMultisampledRTT( renderTarget );
 
-			multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, attachment, textureTarget, properties.get( texture ).__webglTexture, 0, getRenderTargetSamples( renderTarget ) );
+		if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+			if ( multisampled ) {
+
+				multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, _gl.COLOR_ATTACHMENT0, properties.get( texture ).__webglTexture, 0, getRenderTargetSamples( renderTarget ), 0, renderTarget.numViews );
+
+			} else {
+
+				multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, _gl.COLOR_ATTACHMENT0, properties.get( texture ).__webglTexture, 0, 0, renderTarget.numViews );
+
+			}
 
 		} else if ( textureTarget === _gl.TEXTURE_2D || ( textureTarget >= _gl.TEXTURE_CUBE_MAP_POSITIVE_X && textureTarget <= _gl.TEXTURE_CUBE_MAP_NEGATIVE_Z ) ) { // see #24753
 
-			_gl.framebufferTexture2D( _gl.FRAMEBUFFER, attachment, textureTarget, properties.get( texture ).__webglTexture, level );
+			if ( multisampled ) {
+
+				multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, attachment, textureTarget, properties.get( texture ).__webglTexture, 0, getRenderTargetSamples( renderTarget ) );
+
+			} else {
+
+				_gl.framebufferTexture2D( _gl.FRAMEBUFFER, attachment, textureTarget, properties.get( texture ).__webglTexture, level );
+
+			}
 
 		}
 
@@ -1390,7 +1452,59 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		_gl.bindRenderbuffer( _gl.RENDERBUFFER, renderbuffer );
 
-		if ( renderTarget.depthBuffer && ! renderTarget.stencilBuffer ) {
+		if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+			const useMultisample = useMultisampledRTT( renderTarget );
+			const numViews = renderTarget.numViews;
+
+			const depthTexture = renderTarget.depthTexture;
+			let glInternalFormat = _gl.DEPTH_COMPONENT24;
+			let glDepthAttachment = _gl.DEPTH_ATTACHMENT;
+
+			if ( depthTexture && depthTexture.isDepthTexture ) {
+
+				if ( depthTexture.type === FloatType ) {
+
+					glInternalFormat = _gl.DEPTH_COMPONENT32F;
+
+				} else if ( depthTexture.type === UnsignedInt248Type ) {
+
+					glInternalFormat = _gl.DEPTH24_STENCIL8;
+					glDepthAttachment = _gl.DEPTH_STENCIL_ATTACHMENT;
+
+				}
+
+				// we're defaulting to _gl.DEPTH_COMPONENT24 so don't assign here
+				// or else DeepScan will complain
+
+				// else if ( depthTexture.type === UnsignedIntType ) {
+
+				// 	glInternalFormat = _gl.DEPTH_COMPONENT24;
+
+				// }
+
+			}
+
+			let depthStencilTexture = properties.get( renderTarget.depthTexture ).__webglTexture;
+			if ( depthStencilTexture === undefined ) {
+
+				depthStencilTexture = _gl.createTexture();
+				_gl.bindTexture( _gl.TEXTURE_2D_ARRAY, depthStencilTexture );
+				_gl.texStorage3D( _gl.TEXTURE_2D_ARRAY, 1, glInternalFormat, renderTarget.width, renderTarget.height, numViews );
+
+			}
+
+			if ( useMultisample ) {
+
+				multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, glDepthAttachment, depthStencilTexture, 0, getRenderTargetSamples( renderTarget ), 0, numViews );
+
+			} else {
+
+				multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, glDepthAttachment, depthStencilTexture, 0, 0, numViews );
+
+			}
+
+		} else if ( renderTarget.depthBuffer && ! renderTarget.stencilBuffer ) {
 
 			let glInternalFormat = _gl.DEPTH_COMPONENT16;
 
@@ -1514,37 +1628,85 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 		}
 
 		setTexture2D( renderTarget.depthTexture, 0 );
+		if ( renderTarget.depthTexture.image.depth != 1 ) {
+
+			this.setTexture2DArray( renderTarget.depthTexture, 0 );
+
+		} else {
+
+			this.setTexture2D( renderTarget.depthTexture, 0 );
+
+		}
 
 		const webglDepthTexture = properties.get( renderTarget.depthTexture ).__webglTexture;
 		const samples = getRenderTargetSamples( renderTarget );
 
-		if ( renderTarget.depthTexture.format === DepthFormat ) {
+		if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
 
-			if ( useMultisampledRTT( renderTarget ) ) {
+			const useMultisample = useMultisampledRTT( renderTarget );
+			const numViews = renderTarget.numViews;
 
-				multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
+			if ( renderTarget.depthTexture.format === DepthFormat ) {
+
+				if ( useMultisample ) {
+
+					multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, webglDepthTexture, 0, samples, 0, numViews );
+
+				} else {
+
+					multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, webglDepthTexture, 0, 0, numViews );
+
+				}
+
+			} else if ( renderTarget.depthTexture.format === DepthStencilFormat ) {
+
+				if ( useMultisample ) {
+
+					multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, webglDepthTexture, 0, samples, 0, numViews );
+
+				} else {
+
+					multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, webglDepthTexture, 0, 0, numViews );
+
+				}
 
 			} else {
 
-				_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
-
-			}
-
-		} else if ( renderTarget.depthTexture.format === DepthStencilFormat ) {
-
-			if ( useMultisampledRTT( renderTarget ) ) {
-
-				multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
-
-			} else {
-
-				_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
+				throw new Error( 'Unknown depthTexture format' );
 
 			}
 
 		} else {
 
-			throw new Error( 'Unknown depthTexture format' );
+			if ( renderTarget.depthTexture.format === DepthFormat ) {
+
+				if ( useMultisampledRTT( renderTarget ) ) {
+
+					multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
+
+				} else {
+
+					_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
+
+				}
+
+			} else if ( renderTarget.depthTexture.format === DepthStencilFormat ) {
+
+				if ( useMultisampledRTT( renderTarget ) ) {
+
+					multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
+
+				} else {
+
+					_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
+
+				}
+
+			} else {
+
+				throw new Error( 'Unknown depthTexture format' );
+
+			}
 
 		}
 
@@ -1560,7 +1722,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			if ( isCube ) throw new Error( 'target.depthTexture not supported in Cube render targets' );
 
-			setupDepthTexture( renderTargetProperties.__webglFramebuffer, renderTarget );
+			this.setupDepthTexture( renderTargetProperties.__webglFramebuffer, renderTarget );
 
 		} else {
 
@@ -1597,13 +1759,13 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		if ( colorTexture !== undefined ) {
 
-			setupFrameBufferTexture( renderTargetProperties.__webglFramebuffer, renderTarget, renderTarget.texture, _gl.COLOR_ATTACHMENT0, _gl.TEXTURE_2D, 0 );
+			this.setupFrameBufferTexture( renderTargetProperties.__webglFramebuffer, renderTarget, renderTarget.texture, _gl.COLOR_ATTACHMENT0, _gl.TEXTURE_2D );
 
 		}
 
 		if ( depthTexture !== undefined ) {
 
-			setupDepthRenderbuffer( renderTarget );
+			this.setupDepthRenderbuffer( renderTarget );
 
 		}
 
@@ -1823,6 +1985,12 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			}
 
+			if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+				glTextureType = _gl.TEXTURE_2D_ARRAY;
+
+			}
+
 			state.bindTexture( glTextureType, textureProperties.__webglTexture );
 			setTextureParameters( glTextureType, texture, supportsMips );
 
@@ -1852,9 +2020,9 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		// Setup depth and stencil buffers
 
-		if ( renderTarget.depthBuffer ) {
+		if ( renderTarget.depthBuffer || renderTarget.isWebGLMultiviewRenderTarget === true ) {
 
-			setupDepthRenderbuffer( renderTarget );
+			this.setupDepthRenderbuffer( renderTarget );
 
 		}
 
@@ -2090,12 +2258,15 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 	this.setTexture3D = setTexture3D;
 	this.setTextureCube = setTextureCube;
 	this.rebindTextures = rebindTextures;
+	this.uploadTexture = uploadTexture;
 	this.setupRenderTarget = setupRenderTarget;
 	this.updateRenderTargetMipmap = updateRenderTargetMipmap;
 	this.updateMultisampleRenderTarget = updateMultisampleRenderTarget;
+	this.setupDepthTexture = setupDepthTexture;
 	this.setupDepthRenderbuffer = setupDepthRenderbuffer;
 	this.setupFrameBufferTexture = setupFrameBufferTexture;
 	this.useMultisampledRTT = useMultisampledRTT;
+	this.runDeferredUploads = runDeferredUploads;
 
 }
 

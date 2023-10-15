@@ -1,11 +1,12 @@
-import { BackSide, FrontSide, CubeUVReflectionMapping, SRGBColorSpace } from '../../constants.js';
+import { BackSide, CubeUVReflectionMapping, FrontSide, SRGBColorSpace } from '../../constants.js';
+import { cloneUniforms, getUnlitUniformColorSpace } from '../shaders/UniformsUtils.js';
+
 import { BoxGeometry } from '../../geometries/BoxGeometry.js';
-import { PlaneGeometry } from '../../geometries/PlaneGeometry.js';
-import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
 import { Color } from '../../math/Color.js';
 import { Mesh } from '../../objects/Mesh.js';
+import { PlaneGeometry } from '../../geometries/PlaneGeometry.js';
 import { ShaderLib } from '../shaders/ShaderLib.js';
-import { cloneUniforms, getUnlitUniformColorSpace } from '../shaders/UniformsUtils.js';
+import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
 
 const _rgb = { r: 0, b: 0, g: 0 };
 
@@ -67,7 +68,7 @@ function WebGLBackground( renderer, cubemaps, cubeuvmaps, state, objects, alpha,
 			if ( boxMesh === undefined ) {
 
 				boxMesh = new Mesh(
-					new BoxGeometry( 1, 1, 1 ),
+					new BoxGeometry( 10000, 10000, 10000 ),
 					new ShaderMaterial( {
 						name: 'BackgroundCubeMaterial',
 						uniforms: cloneUniforms( ShaderLib.backgroundCube.uniforms ),
