@@ -333,7 +333,7 @@ class WebXRManager extends EventDispatcher {
 
 					session.updateRenderState( { layers: [ glProjLayer ] } );
 
-					const rtOptions = {
+					const renderTargetOptions = {
 						format: RGBAFormat,
 						type: UnsignedByteType,
 						depthTexture: new DepthTexture( glProjLayer.textureWidth, glProjLayer.textureHeight, depthType, undefined, undefined, undefined, undefined, undefined, undefined, depthFormat ),
@@ -348,14 +348,14 @@ class WebXRManager extends EventDispatcher {
 
 						this.maxNumViews = gl.getParameter( extension.MAX_VIEWS_OVR );
 
-						newRenderTarget = new WebGLMultiviewRenderTarget( glProjLayer.textureWidth, glProjLayer.textureHeight, 2, rtOptions );
+						newRenderTarget = new WebGLMultiviewRenderTarget( glProjLayer.textureWidth, glProjLayer.textureHeight, 2, renderTargetOptions );
 
 					} else {
 
 						newRenderTarget = new WebGLRenderTarget(
 							glProjLayer.textureWidth,
 							glProjLayer.textureHeight,
-							rtOptions );
+							renderTargetOptions );
 
 					}
 

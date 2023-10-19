@@ -1121,7 +1121,7 @@ class WebGLRenderer {
 
 				if ( xr.enabled && xr.isMultiview ) {
 
-					textures.deferTextureUploads = true;
+					textures.setDeferTextureUploads( true );
 
 					renderScene( currentRenderList, scene, camera, camera.cameras[ 0 ].viewport );
 

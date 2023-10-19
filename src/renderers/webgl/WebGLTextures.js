@@ -21,6 +21,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 	const _sources = new WeakMap(); // maps WebglTexture objects to instances of Source
 
 	let _deferredUploads = [];
+	let _deferTextureUploads = false;
 
 	// cordova iOS (as of 5.0) still uses UIWebView, which provides OffscreenCanvas,
 	// also OffscreenCanvas.getContext("webgl"), but not OffscreenCanvas.getContext("2d")!
@@ -489,7 +490,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			} else {
 
-				if ( this.uploadTexture( textureProperties, texture, slot ) ) {
+				if ( uploadTexture( textureProperties, texture, slot ) ) {
 
 					return;
 
@@ -509,7 +510,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		if ( texture.version > 0 && textureProperties.__version !== texture.version ) {
 
-			this.uploadTexture( textureProperties, texture, slot );
+			uploadTexture( textureProperties, texture, slot );
 			return;
 
 		}
@@ -726,27 +727,33 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 	}
 
+	function setDeferTextureUploads( deferFlag ) {
+
+		_deferTextureUploads = deferFlag;
+
+	}
+
 	function runDeferredUploads() {
 
-		const previousDeferSetting = this.deferTextureUploads;
-		this.deferTextureUploads = false;
+		const previousDeferSetting = _deferTextureUploads;
+		_deferTextureUploads = false;
 
 		for ( const upload of _deferredUploads ) {
 
-			this.uploadTexture( upload.textureProperties, upload.texture, upload.slot );
+			uploadTexture( upload.textureProperties, upload.texture, upload.slot );
 			upload.texture.isPendingDeferredUpload = false;
 
 		}
 
 		_deferredUploads = [];
 
-		this.deferTextureUploads = previousDeferSetting;
+		_deferTextureUploads = previousDeferSetting;
 
 	}
 
 	function uploadTexture( textureProperties, texture, slot ) {
 
-		if ( this.deferTextureUploads ) {
+		if ( _deferTextureUploads ) {
 
 			if ( ! texture.isPendingDeferredUpload ) {
 
@@ -1639,11 +1646,11 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 		setTexture2D( renderTarget.depthTexture, 0 );
 		if ( renderTarget.depthTexture.image.depth != 1 ) {
 
-			this.setTexture2DArray( renderTarget.depthTexture, 0 );
+			setTexture2DArray( renderTarget.depthTexture, 0 );
 
 		} else {
 
-			this.setTexture2D( renderTarget.depthTexture, 0 );
+			setTexture2D( renderTarget.depthTexture, 0 );
 
 		}
 
@@ -1731,7 +1738,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			if ( isCube ) throw new Error( 'target.depthTexture not supported in Cube render targets' );
 
-			this.setupDepthTexture( renderTargetProperties.__webglFramebuffer, renderTarget );
+			setupDepthTexture( renderTargetProperties.__webglFramebuffer, renderTarget );
 
 		} else {
 
@@ -2276,6 +2283,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 	this.setupFrameBufferTexture = setupFrameBufferTexture;
 	this.useMultisampledRTT = useMultisampledRTT;
 	this.runDeferredUploads = runDeferredUploads;
+	this.setDeferTextureUploads = setDeferTextureUploads;
 
 }
 
