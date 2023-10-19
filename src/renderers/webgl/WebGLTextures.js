@@ -1775,13 +1775,13 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		if ( colorTexture !== undefined ) {
 
-			this.setupFrameBufferTexture( renderTargetProperties.__webglFramebuffer, renderTarget, renderTarget.texture, _gl.COLOR_ATTACHMENT0, _gl.TEXTURE_2D, 0 );
+			setupFrameBufferTexture( renderTargetProperties.__webglFramebuffer, renderTarget, renderTarget.texture, _gl.COLOR_ATTACHMENT0, _gl.TEXTURE_2D, 0 );
 
 		}
 
 		if ( depthTexture !== undefined ) {
 
-			this.setupDepthRenderbuffer( renderTarget );
+			setupDepthRenderbuffer( renderTarget );
 
 		}
 
