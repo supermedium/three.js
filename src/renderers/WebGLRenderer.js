@@ -46,6 +46,7 @@ import { WebGLGeometries } from './webgl/WebGLGeometries.js';
 import { WebGLIndexedBufferRenderer } from './webgl/WebGLIndexedBufferRenderer.js';
 import { WebGLInfo } from './webgl/WebGLInfo.js';
 import { WebGLMorphtargets } from './webgl/WebGLMorphtargets.js';
+import { WebGLMultiview } from './webgl/WebGLMultiview.js';
 import { WebGLObjects } from './webgl/WebGLObjects.js';
 import { WebGLPrograms } from './webgl/WebGLPrograms.js';
 import { WebGLProperties } from './webgl/WebGLProperties.js';
@@ -79,6 +80,7 @@ class WebGLRenderer {
 			preserveDrawingBuffer = false,
 			powerPreference = 'default',
 			failIfMajorPerformanceCaveat = false,
+			multiviewStereo = false,
 		} = parameters;
 
 		this.isWebGLRenderer = true;
@@ -313,6 +315,7 @@ class WebGLRenderer {
 		let extensions, capabilities, state, info;
 		let properties, textures, cubemaps, cubeuvmaps, attributes, geometries, objects;
 		let programCache, materials, renderLists, renderStates, clipping, shadowMap;
+		let multiview;
 
 		let background, morphtargets, bufferRenderer, indexedBufferRenderer;
 
@@ -346,6 +349,7 @@ class WebGLRenderer {
 			renderLists = new WebGLRenderLists();
 			renderStates = new WebGLRenderStates( extensions, capabilities );
 			background = new WebGLBackground( _this, cubemaps, cubeuvmaps, state, objects, _alpha, premultipliedAlpha );
+			multiview = new WebGLMultiview( _this, extensions, _gl );
 			shadowMap = new WebGLShadowMap( _this, objects, capabilities );
 			uniformsGroups = new WebGLUniformsGroups( _gl, info, capabilities, state );
 
@@ -368,7 +372,7 @@ class WebGLRenderer {
 
 		// xr
 
-		const xr = ( typeof navigator !== 'undefined' && 'xr' in navigator ) ? new WebXRManager( _this, _gl ) : new WebVRManager( _this );
+		const xr = ( typeof navigator !== 'undefined' && 'xr' in navigator ) ? new WebXRManager( _this, _gl, extensions, multiviewStereo ) : new WebVRManager( _this );
 
 		this.xr = xr;
 
@@ -1214,13 +1218,23 @@ class WebGLRenderer {
 
 			if ( camera.isArrayCamera ) {
 
-				const cameras = camera.cameras;
+				if ( xr.enabled && xr.isMultiview ) {
 
-				for ( let i = 0, l = cameras.length; i < l; i ++ ) {
+					textures.setDeferTextureUploads( true );
 
-					const camera2 = cameras[ i ];
+					renderScene( currentRenderList, scene, camera, camera.cameras[ 0 ].viewport );
 
-					renderScene( currentRenderList, scene, camera2, camera2.viewport );
+				} else {
+
+					const cameras = camera.cameras;
+
+					for ( let i = 0, l = cameras.length; i < l; i ++ ) {
+
+						const camera2 = cameras[ i ];
+
+						renderScene( currentRenderList, scene, camera2, camera2.viewport );
+
+					}
 
 				}
 
@@ -1247,6 +1261,8 @@ class WebGLRenderer {
 			//
 
 			if ( scene.isScene === true ) scene.onAfterRender( _this, scene, camera );
+
+			textures.runDeferredUploads();
 
 			if ( xr.enabled && xr.submitFrame ) {
 
@@ -1733,6 +1749,7 @@ class WebGLRenderer {
 			materialProperties.vertexAlphas = parameters.vertexAlphas;
 			materialProperties.vertexTangents = parameters.vertexTangents;
 			materialProperties.toneMapping = parameters.toneMapping;
+			materialProperties.numMultiviewViews = parameters.numMultiviewViews;
 
 		}
 
@@ -1763,6 +1780,8 @@ class WebGLRenderer {
 				}
 
 			}
+
+			const numMultiviewViews = _currentRenderTarget && _currentRenderTarget.isWebGLMultiviewRenderTarget ? _currentRenderTarget.numViews : 0;
 
 			const morphAttribute = geometry.morphAttributes.position || geometry.morphAttributes.normal || geometry.morphAttributes.color;
 			const morphTargetsCount = ( morphAttribute !== undefined ) ? morphAttribute.length : 0;
@@ -1867,6 +1886,10 @@ class WebGLRenderer {
 
 					needsProgramChange = true;
 
+				} else if ( materialProperties.numMultiviewViews !== numMultiviewViews ) {
+
+					needsProgramChange = true;
+
 				}
 
 			} else {
@@ -1913,8 +1936,17 @@ class WebGLRenderer {
 
 				// common camera uniforms
 
-				p_uniforms.setValue( _gl, 'projectionMatrix', camera.projectionMatrix );
-				p_uniforms.setValue( _gl, 'viewMatrix', camera.matrixWorldInverse );
+				if ( program.numMultiviewViews > 0 ) {
+
+					multiview.updateCameraProjectionMatricesUniform( camera, p_uniforms );
+					multiview.updateCameraViewMatricesUniform( camera, p_uniforms );
+
+				} else {
+
+					p_uniforms.setValue( _gl, 'projectionMatrix', camera.projectionMatrix );
+					p_uniforms.setValue( _gl, 'viewMatrix', camera.matrixWorldInverse );
+
+				}
 
 				const uCamPos = p_uniforms.map.cameraPosition;
 
@@ -2062,8 +2094,17 @@ class WebGLRenderer {
 
 			// common matrices
 
-			p_uniforms.setValue( _gl, 'modelViewMatrix', object.modelViewMatrix );
-			p_uniforms.setValue( _gl, 'normalMatrix', object.normalMatrix );
+			if ( program.numMultiviewViews > 0 ) {
+
+				multiview.updateObjectMatricesUniforms( object, camera, p_uniforms );
+
+			} else {
+
+				p_uniforms.setValue( _gl, 'modelViewMatrix', object.modelViewMatrix );
+				p_uniforms.setValue( _gl, 'normalMatrix', object.normalMatrix );
+
+			}
+
 			p_uniforms.setValue( _gl, 'modelMatrix', object.matrixWorld );
 
 			// UBOs
@@ -2173,20 +2214,16 @@ class WebGLRenderer {
 			const renderTargetProperties = properties.get( renderTarget );
 			renderTargetProperties.__hasExternalTextures = true;
 
-			if ( renderTargetProperties.__hasExternalTextures ) {
+			renderTargetProperties.__autoAllocateDepthBuffer = depthTexture === undefined;
 
-				renderTargetProperties.__autoAllocateDepthBuffer = depthTexture === undefined;
+			if ( ! renderTargetProperties.__autoAllocateDepthBuffer && ! _currentRenderTarget.isWebGLMultiviewRenderTarget ) {
 
-				if ( ! renderTargetProperties.__autoAllocateDepthBuffer ) {
+				// The multisample_render_to_texture extension doesn't work properly if there
+				// are midframe flushes and an external depth buffer. Disable use of the extension.
+				if ( extensions.has( 'WEBGL_multisampled_render_to_texture' ) === true ) {
 
-					// The multisample_render_to_texture extension doesn't work properly if there
-					// are midframe flushes and an external depth buffer. Disable use of the extension.
-					if ( extensions.has( 'WEBGL_multisampled_render_to_texture' ) === true ) {
-
-						console.warn( 'THREE.WebGLRenderer: Render-to-texture extension was disabled because an external texture was provided' );
-						renderTargetProperties.__useRenderToTexture = false;
-
-					}
+					console.warn( 'THREE.WebGLRenderer: Render-to-texture extension was disabled because an external texture was provided' );
+					renderTargetProperties.__useRenderToTexture = false;
 
 				}
 

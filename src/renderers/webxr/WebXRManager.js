@@ -5,6 +5,7 @@ import { Vector3 } from '../../math/Vector3.js';
 import { Vector4 } from '../../math/Vector4.js';
 import { RAD2DEG } from '../../math/MathUtils.js';
 import { WebGLAnimation } from '../webgl/WebGLAnimation.js';
+import { WebGLMultiviewRenderTarget } from '../WebGLMultiviewRenderTarget.js';
 import { WebGLRenderTarget } from '../WebGLRenderTarget.js';
 import { WebXRController } from './WebXRController.js';
 import { DepthTexture } from '../../textures/DepthTexture.js';
@@ -12,7 +13,7 @@ import { DepthFormat, DepthStencilFormat, RGBAFormat, UnsignedByteType, Unsigned
 
 class WebXRManager extends EventDispatcher {
 
-	constructor( renderer, gl ) {
+	constructor( renderer, gl, extensions, useMultiview ) {
 
 		super();
 
@@ -68,6 +69,7 @@ class WebXRManager extends EventDispatcher {
 		this.enabled = false;
 
 		this.isPresenting = false;
+		this.isMultiview = false;
 
 		this.getCameraPose = function ( ) {
 
@@ -311,11 +313,19 @@ class WebXRManager extends EventDispatcher {
 
 					}
 
+					scope.isMultiview = useMultiview && extensions.has( 'OCULUS_multiview' );
+
 					const projectionlayerInit = {
 						colorFormat: gl.RGBA8,
 						depthFormat: glDepthFormat,
 						scaleFactor: framebufferScaleFactor
 					};
+
+					if ( scope.isMultiview ) {
+
+						projectionlayerInit.textureType = 'texture-array';
+
+					}
 
 					glBinding = new XRWebGLBinding( session, gl );
 
@@ -323,17 +333,31 @@ class WebXRManager extends EventDispatcher {
 
 					session.updateRenderState( { layers: [ glProjLayer ] } );
 
-					newRenderTarget = new WebGLRenderTarget(
-						glProjLayer.textureWidth,
-						glProjLayer.textureHeight,
-						{
-							format: RGBAFormat,
-							type: UnsignedByteType,
-							depthTexture: new DepthTexture( glProjLayer.textureWidth, glProjLayer.textureHeight, depthType, undefined, undefined, undefined, undefined, undefined, undefined, depthFormat ),
-							stencilBuffer: attributes.stencil,
-							colorSpace: renderer.outputColorSpace,
-							samples: attributes.antialias ? 4 : 0
-						} );
+					const renderTargetOptions = {
+						format: RGBAFormat,
+						type: UnsignedByteType,
+						depthTexture: new DepthTexture( glProjLayer.textureWidth, glProjLayer.textureHeight, depthType, undefined, undefined, undefined, undefined, undefined, undefined, depthFormat ),
+						stencilBuffer: attributes.stencil,
+						colorSpace: renderer.outputColorSpace,
+						samples: attributes.antialias ? 4 : 0
+					};
+
+					if ( scope.isMultiview ) {
+
+						const extension = extensions.get( 'OCULUS_multiview' );
+
+						this.maxNumViews = gl.getParameter( extension.MAX_VIEWS_OVR );
+
+						newRenderTarget = new WebGLMultiviewRenderTarget( glProjLayer.textureWidth, glProjLayer.textureHeight, 2, renderTargetOptions );
+
+					} else {
+
+						newRenderTarget = new WebGLRenderTarget(
+							glProjLayer.textureWidth,
+							glProjLayer.textureHeight,
+							renderTargetOptions );
+
+					}
 
 					const renderTargetProperties = renderer.properties.get( newRenderTarget );
 					renderTargetProperties.__ignoreDepthValues = glProjLayer.ignoreDepthValues;
