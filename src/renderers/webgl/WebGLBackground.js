@@ -94,7 +94,7 @@ function WebGLBackground( renderer, environments, state, objects, alpha, premult
 			if ( boxMesh === undefined ) {
 
 				boxMesh = new Mesh(
-					new BoxGeometry( 1, 1, 1 ),
+					new BoxGeometry( 10000, 10000, 10000 ),
 					new ShaderMaterial( {
 						name: 'BackgroundCubeMaterial',
 						uniforms: cloneUniforms( ShaderLib.backgroundCube.uniforms ),

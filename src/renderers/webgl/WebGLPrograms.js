@@ -121,6 +121,8 @@ function WebGLPrograms( renderer, environments, extensions, capabilities, bindin
 		const currentRenderTarget = renderer.getRenderTarget();
 		const reversedDepthBuffer = renderer.state.buffers.depth.getReversed();
 
+		const numMultiviewViews = currentRenderTarget && currentRenderTarget.isWebGLMultiviewRenderTarget ? currentRenderTarget.numViews : 0;
+
 		const IS_INSTANCEDMESH = object.isInstancedMesh === true;
 		const IS_BATCHEDMESH = object.isBatchedMesh === true;
 
@@ -209,6 +211,7 @@ function WebGLPrograms( renderer, environments, extensions, capabilities, bindin
 			instancingColor: IS_INSTANCEDMESH && object.instanceColor !== null,
 			instancingMorph: IS_INSTANCEDMESH && object.morphTexture !== null,
 
+			numMultiviewViews: numMultiviewViews,
 			outputColorSpace: ( currentRenderTarget === null ) ? renderer.outputColorSpace : ( currentRenderTarget.isXRRenderTarget === true ? currentRenderTarget.texture.colorSpace : ColorManagement.workingColorSpace ),
 			alphaToCoverage: !! material.alphaToCoverage,
 
@@ -592,6 +595,8 @@ function WebGLPrograms( renderer, environments, extensions, capabilities, bindin
 			_programLayers.enable( 22 );
 		if ( parameters.hasPositionAttribute )
 			_programLayers.enable( 23 );
+		if ( parameters.numMultiviewViews )
+			_programLayers.enable( 24 );
 
 		array.push( _programLayers.mask );
 
