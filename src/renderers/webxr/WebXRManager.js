@@ -187,10 +187,6 @@ class WebXRManager extends EventDispatcher {
 			session = null;
 			newRenderTarget = null;
 
-
-			renderer.setPixelRatio( currentPixelRatio );
-			renderer.setSize( currentSize.width, currentSize.height, false );
-
 			//
 
 			animation.stop();
@@ -252,7 +248,7 @@ class WebXRManager extends EventDispatcher {
 
 		};
 
-		this._getRenderTarget = function () {
+		this.getRenderTarget = function () {
 
 			return newRenderTarget;
 
@@ -311,8 +307,6 @@ class WebXRManager extends EventDispatcher {
 					glBaseLayer = new XRWebGLLayer( session, gl, layerInit );
 
 					session.updateRenderState( { baseLayer: glBaseLayer } );
-
-
 
 					renderer.setPixelRatio( 1 );
 					renderer.setSize( glBaseLayer.framebufferWidth, glBaseLayer.framebufferHeight, false );
@@ -400,10 +394,6 @@ class WebXRManager extends EventDispatcher {
 
 				customReferenceSpace = null;
 				referenceSpace = await session.requestReferenceSpace( referenceSpaceType );
-
-				currentPixelRatio = renderer.getPixelRatio();
-				renderer.getSize( currentSize );
-
 
 				animation.setContext( session );
 				animation.start();
