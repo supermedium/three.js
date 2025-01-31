@@ -24,17 +24,13 @@ import { WebXRDepthSensing } from './WebXRDepthSensing.js';
  */
 class WebXRManager extends EventDispatcher {
 
-<<<<<<< HEAD
 	/**
 	 * Constructs a new WebGL renderer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGL2RenderingContext} gl - The rendering context.
 	 */
-	constructor( renderer, gl ) {
-=======
 	constructor( renderer, gl, extensions, useMultiview ) {
->>>>>>> 1123347a27 (WebXR: Implement antialiased multiview using OCULUS_multiview (#15))
 
 		super();
 
@@ -250,6 +246,8 @@ class WebXRManager extends EventDispatcher {
 
 			// restore framebuffer/rendering state
 
+			scope.isPresenting = false;
+
 			renderer.setRenderTarget( initialRenderTarget );
 
 			glBaseLayer = null;
@@ -261,8 +259,6 @@ class WebXRManager extends EventDispatcher {
 			//
 
 			animation.stop();
-
-			scope.isPresenting = false;
 
 			renderer.setPixelRatio( currentPixelRatio );
 			renderer.setSize( currentSize.width, currentSize.height, false );
@@ -364,6 +360,12 @@ class WebXRManager extends EventDispatcher {
 		this.getFrame = function () {
 
 			return xrFrame;
+
+		};
+
+		this.getRenderTarget = function () {
+
+			return newRenderTarget;
 
 		};
 
