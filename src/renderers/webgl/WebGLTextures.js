@@ -1580,7 +1580,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			}
 
-		} else if ( renderTarget.depthBuffer && ! renderTarget.stencilBuffer ) {
+		} else if ( renderTarget.depthBuffer ) {
 
 			// retrieve the depth attachment types
 			const depthTexture = renderTarget.depthTexture;
@@ -1670,7 +1670,6 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		}
 
-		setTexture2D( renderTarget.depthTexture, 0 );
 		if ( renderTarget.depthTexture.image.depth != 1 ) {
 
 			setTexture2DArray( renderTarget.depthTexture, 0 );
