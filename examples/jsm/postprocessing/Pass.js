@@ -74,8 +74,13 @@ class FullScreenQuad {
 
 	render( renderer ) {
 
-		renderer.render( this._mesh, _camera );
+		// Disable XR projection for fullscreen effects
+		// https://github.com/mrdoob/three.js/pull/18846
+		const xrEnabled = renderer.xr.enabled;
 
+		renderer.xr.enabled = false;
+		renderer.render( this._mesh, _camera );
+		renderer.xr.enabled = xrEnabled;
 	}
 
 	get material() {

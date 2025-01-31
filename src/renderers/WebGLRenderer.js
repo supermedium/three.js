@@ -2335,6 +2335,13 @@ class WebGLRenderer {
 		const _scratchFrameBuffer = _gl.createFramebuffer();
 		this.setRenderTarget = function ( renderTarget, activeCubeFace = 0, activeMipmapLevel = 0 ) {
 
+			// Render to base layer instead of canvas in WebXR
+			if ( renderTarget === null && this.xr.isPresenting ) {
+
+				renderTarget = this.xr.getRenderTarget();
+
+			}
+
 			_currentRenderTarget = renderTarget;
 			_currentActiveCubeFace = activeCubeFace;
 			_currentActiveMipmapLevel = activeMipmapLevel;
