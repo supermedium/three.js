@@ -342,7 +342,7 @@ class WebGLRenderer {
 
 		// xr
 
-		const xr = new WebXRManager( _this, _gl );
+		const xr = new WebXRManager( _this, _gl, extensions, multiviewStereo );
 
 		this.xr = xr;
 
