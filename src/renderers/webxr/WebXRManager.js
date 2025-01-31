@@ -248,6 +248,12 @@ class WebXRManager extends EventDispatcher {
 
 		};
 
+		this.getRenderTarget = function () {
+
+			return newRenderTarget;
+
+		};
+
 		this.getFrame = function () {
 
 			return xrFrame;
