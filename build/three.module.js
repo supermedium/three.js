@@ -3,7 +3,7 @@
  * Copyright 2010-2025 Three.js Authors
  * SPDX-License-Identifier: MIT
  */
-import { Matrix3, Vector2, Color, mergeUniforms, Vector3, CubeUVReflectionMapping, Mesh, BoxGeometry, ShaderMaterial, BackSide, cloneUniforms, Euler, Matrix4, ColorManagement, SRGBTransfer, PlaneGeometry, FrontSide, getUnlitUniformColorSpace, IntType, HalfFloatType, UnsignedByteType, FloatType, RGBAFormat, Plane, EquirectangularReflectionMapping, EquirectangularRefractionMapping, WebGLCubeRenderTarget, CubeReflectionMapping, CubeRefractionMapping, OrthographicCamera, PerspectiveCamera, NoToneMapping, MeshBasicMaterial, NoBlending, WebGLRenderTarget, BufferGeometry, BufferAttribute, LinearSRGBColorSpace, LinearFilter, warnOnce, Uint32BufferAttribute, Uint16BufferAttribute, arrayNeedsUint32, Vector4, DataArrayTexture, CubeTexture, Data3DTexture, LessEqualCompare, DepthTexture, Texture, GLSL3, PCFShadowMap, PCFSoftShadowMap, VSMShadowMap, CustomToneMapping, NeutralToneMapping, AgXToneMapping, ACESFilmicToneMapping, CineonToneMapping, ReinhardToneMapping, LinearToneMapping, LinearTransfer, AddOperation, MixOperation, MultiplyOperation, UniformsUtils, DoubleSide, NormalBlending, TangentSpaceNormalMap, ObjectSpaceNormalMap, Layers, Frustum, MeshDepthMaterial, RGBADepthPacking, MeshDistanceMaterial, NearestFilter, LessEqualDepth, ReverseSubtractEquation, SubtractEquation, AddEquation, OneMinusConstantAlphaFactor, ConstantAlphaFactor, OneMinusConstantColorFactor, ConstantColorFactor, OneMinusDstAlphaFactor, OneMinusDstColorFactor, OneMinusSrcAlphaFactor, OneMinusSrcColorFactor, DstAlphaFactor, DstColorFactor, SrcAlphaSaturateFactor, SrcAlphaFactor, SrcColorFactor, OneFactor, ZeroFactor, NotEqualDepth, GreaterDepth, GreaterEqualDepth, EqualDepth, LessDepth, AlwaysDepth, NeverDepth, CullFaceNone, CullFaceBack, CullFaceFront, CustomBlending, MultiplyBlending, SubtractiveBlending, AdditiveBlending, MinEquation, MaxEquation, MirroredRepeatWrapping, ClampToEdgeWrapping, RepeatWrapping, LinearMipmapLinearFilter, LinearMipmapNearestFilter, NearestMipmapLinearFilter, NearestMipmapNearestFilter, NotEqualCompare, GreaterCompare, GreaterEqualCompare, EqualCompare, LessCompare, AlwaysCompare, NeverCompare, NoColorSpace, DepthStencilFormat, getByteLength, DepthFormat, UnsignedIntType, UnsignedInt248Type, UnsignedShortType, createElementNS, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedInt5999Type, ByteType, ShortType, AlphaFormat, RGBFormat, LuminanceFormat, LuminanceAlphaFormat, RedFormat, RedIntegerFormat, RGFormat, RGIntegerFormat, RGBAIntegerFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGB_ETC2_Format, RGBA_ETC2_EAC_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, RGBA_BPTC_Format, RGB_BPTC_SIGNED_Format, RGB_BPTC_UNSIGNED_Format, RED_RGTC1_Format, SIGNED_RED_RGTC1_Format, RED_GREEN_RGTC2_Format, SIGNED_RED_GREEN_RGTC2_Format, EventDispatcher, ArrayCamera, WebXRController, RAD2DEG, createCanvasElement, SRGBColorSpace, REVISION, toNormalizedProjectionMatrix, toReversedProjectionMatrix, probeAsync, WebGLCoordinateSystem } from './three.core.js';
+import { Color, Matrix3, Vector2, mergeUniforms, Vector3, CubeUVReflectionMapping, Mesh, BoxGeometry, ShaderMaterial, cloneUniforms, BackSide, ColorManagement, SRGBTransfer, PlaneGeometry, FrontSide, getUnlitUniformColorSpace, Euler, Matrix4, IntType, RGBAFormat, HalfFloatType, UnsignedByteType, FloatType, Plane, EquirectangularReflectionMapping, EquirectangularRefractionMapping, WebGLCubeRenderTarget, CubeReflectionMapping, CubeRefractionMapping, PerspectiveCamera, NoToneMapping, MeshBasicMaterial, BufferGeometry, BufferAttribute, WebGLRenderTarget, NoBlending, OrthographicCamera, LinearFilter, LinearSRGBColorSpace, warnOnce, arrayNeedsUint32, Uint32BufferAttribute, Uint16BufferAttribute, Vector4, DataArrayTexture, LessEqualCompare, Texture, DepthTexture, Data3DTexture, CubeTexture, GLSL3, CustomToneMapping, NeutralToneMapping, AgXToneMapping, ACESFilmicToneMapping, CineonToneMapping, ReinhardToneMapping, LinearToneMapping, PCFShadowMap, PCFSoftShadowMap, VSMShadowMap, LinearTransfer, AddOperation, MixOperation, MultiplyOperation, ObjectSpaceNormalMap, TangentSpaceNormalMap, NormalBlending, DoubleSide, UniformsUtils, Layers, Frustum, MeshDepthMaterial, RGBADepthPacking, MeshDistanceMaterial, NearestFilter, LessEqualDepth, AddEquation, SubtractEquation, ReverseSubtractEquation, ZeroFactor, OneFactor, SrcColorFactor, SrcAlphaFactor, SrcAlphaSaturateFactor, DstColorFactor, DstAlphaFactor, OneMinusSrcColorFactor, OneMinusSrcAlphaFactor, OneMinusDstColorFactor, OneMinusDstAlphaFactor, ConstantColorFactor, OneMinusConstantColorFactor, ConstantAlphaFactor, OneMinusConstantAlphaFactor, CustomBlending, MultiplyBlending, SubtractiveBlending, AdditiveBlending, CullFaceNone, CullFaceBack, CullFaceFront, NotEqualDepth, GreaterDepth, GreaterEqualDepth, EqualDepth, LessDepth, AlwaysDepth, NeverDepth, MinEquation, MaxEquation, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, NearestMipmapNearestFilter, NearestMipmapLinearFilter, LinearMipmapNearestFilter, LinearMipmapLinearFilter, NeverCompare, AlwaysCompare, LessCompare, EqualCompare, GreaterEqualCompare, GreaterCompare, NotEqualCompare, NoColorSpace, DepthStencilFormat, getByteLength, DepthFormat, UnsignedIntType, UnsignedInt248Type, UnsignedShortType, createElementNS, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedInt5999Type, ByteType, ShortType, AlphaFormat, RGBFormat, LuminanceFormat, LuminanceAlphaFormat, RedFormat, RedIntegerFormat, RGFormat, RGIntegerFormat, RGBAIntegerFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGB_ETC2_Format, RGBA_ETC2_EAC_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, RGBA_BPTC_Format, RGB_BPTC_SIGNED_Format, RGB_BPTC_UNSIGNED_Format, RED_RGTC1_Format, SIGNED_RED_RGTC1_Format, RED_GREEN_RGTC2_Format, SIGNED_RED_GREEN_RGTC2_Format, EventDispatcher, ArrayCamera, WebXRController, RAD2DEG, createCanvasElement, SRGBColorSpace, REVISION, toNormalizedProjectionMatrix, toReversedProjectionMatrix, probeAsync, WebGLCoordinateSystem } from './three.core.js';
 export { AdditiveAnimationBlendMode, AlwaysStencilFunc, AmbientLight, AnimationAction, AnimationClip, AnimationLoader, AnimationMixer, AnimationObjectGroup, AnimationUtils, ArcCurve, ArrowHelper, AttachedBindMode, Audio, AudioAnalyser, AudioContext, AudioListener, AudioLoader, AxesHelper, BasicDepthPacking, BasicShadowMap, BatchedMesh, Bone, BooleanKeyframeTrack, Box2, Box3, Box3Helper, BoxHelper, BufferGeometryLoader, Cache, Camera, CameraHelper, CanvasTexture, CapsuleGeometry, CatmullRomCurve3, CircleGeometry, Clock, ColorKeyframeTrack, CompressedArrayTexture, CompressedCubeTexture, CompressedTexture, CompressedTextureLoader, ConeGeometry, Controls, CubeCamera, CubeTextureLoader, CubicBezierCurve, CubicBezierCurve3, CubicInterpolant, CullFaceFrontBack, Curve, CurvePath, CylinderGeometry, Cylindrical, DataTexture, DataTextureLoader, DataUtils, DecrementStencilOp, DecrementWrapStencilOp, DefaultLoadingManager, DetachedBindMode, DirectionalLight, DirectionalLightHelper, DiscreteInterpolant, DodecahedronGeometry, DynamicCopyUsage, DynamicDrawUsage, DynamicReadUsage, EdgesGeometry, EllipseCurve, EqualStencilFunc, ExtrudeGeometry, FileLoader, Float16BufferAttribute, Float32BufferAttribute, Fog, FogExp2, FramebufferTexture, GLBufferAttribute, GLSL1, GreaterEqualStencilFunc, GreaterStencilFunc, GridHelper, Group, HemisphereLight, HemisphereLightHelper, IcosahedronGeometry, ImageBitmapLoader, ImageLoader, ImageUtils, IncrementStencilOp, IncrementWrapStencilOp, InstancedBufferAttribute, InstancedBufferGeometry, InstancedInterleavedBuffer, InstancedMesh, Int16BufferAttribute, Int32BufferAttribute, Int8BufferAttribute, InterleavedBuffer, InterleavedBufferAttribute, Interpolant, InterpolateDiscrete, InterpolateLinear, InterpolateSmooth, InvertStencilOp, KeepStencilOp, KeyframeTrack, LOD, LatheGeometry, LessEqualStencilFunc, LessStencilFunc, Light, LightProbe, Line, Line3, LineBasicMaterial, LineCurve, LineCurve3, LineDashedMaterial, LineLoop, LineSegments, LinearInterpolant, LinearMipMapLinearFilter, LinearMipMapNearestFilter, Loader, LoaderUtils, LoadingManager, LoopOnce, LoopPingPong, LoopRepeat, MOUSE, Material, MaterialLoader, MathUtils, Matrix2, MeshLambertMaterial, MeshMatcapMaterial, MeshNormalMaterial, MeshPhongMaterial, MeshPhysicalMaterial, MeshStandardMaterial, MeshToonMaterial, NearestMipMapLinearFilter, NearestMipMapNearestFilter, NeverStencilFunc, NormalAnimationBlendMode, NotEqualStencilFunc, NumberKeyframeTrack, Object3D, ObjectLoader, OctahedronGeometry, Path, PlaneHelper, PointLight, PointLightHelper, Points, PointsMaterial, PolarGridHelper, PolyhedronGeometry, PositionalAudio, PropertyBinding, PropertyMixer, QuadraticBezierCurve, QuadraticBezierCurve3, Quaternion, QuaternionKeyframeTrack, QuaternionLinearInterpolant, RGBDepthPacking, RGBIntegerFormat, RGDepthPacking, RawShaderMaterial, Ray, Raycaster, RectAreaLight, RenderTarget, RenderTarget3D, RenderTargetArray, ReplaceStencilOp, RingGeometry, Scene, ShadowMaterial, Shape, ShapeGeometry, ShapePath, ShapeUtils, Skeleton, SkeletonHelper, SkinnedMesh, Source, Sphere, SphereGeometry, Spherical, SphericalHarmonics3, SplineCurve, SpotLight, SpotLightHelper, Sprite, SpriteMaterial, StaticCopyUsage, StaticDrawUsage, StaticReadUsage, StereoCamera, StreamCopyUsage, StreamDrawUsage, StreamReadUsage, StringKeyframeTrack, TOUCH, TetrahedronGeometry, TextureLoader, TextureUtils, TimestampQuery, TorusGeometry, TorusKnotGeometry, Triangle, TriangleFanDrawMode, TriangleStripDrawMode, TrianglesDrawMode, TubeGeometry, UVMapping, Uint8BufferAttribute, Uint8ClampedBufferAttribute, Uniform, UniformsGroup, VectorKeyframeTrack, VideoFrameTexture, VideoTexture, WebGL3DRenderTarget, WebGLArrayRenderTarget, WebGPUCoordinateSystem, WireframeGeometry, WrapAroundEnding, ZeroCurvatureEnding, ZeroSlopeEnding, ZeroStencilOp } from './three.core.js';
 
 function WebGLAnimation() {
@@ -1375,7 +1375,7 @@ function WebGLBackground( renderer, cubemaps, cubeuvmaps, state, objects, alpha,
 			if ( boxMesh === undefined ) {
 
 				boxMesh = new Mesh(
-					new BoxGeometry( 1, 1, 1 ),
+					new BoxGeometry( 10000, 10000, 10000 ),
 					new ShaderMaterial( {
 						name: 'BackgroundCubeMaterial',
 						uniforms: cloneUniforms( ShaderLib.backgroundCube.uniforms ),
@@ -4304,6 +4304,103 @@ function WebGLMorphtargets( gl, capabilities, textures ) {
 
 }
 
+/**
+ * @author fernandojsg / http://fernandojsg.com
+ * @author Takahiro https://github.com/takahirox
+ */
+
+class WebGLMultiview {
+
+	 constructor( renderer, extensions, gl ) {
+
+		 this.renderer = renderer;
+
+		 this.DEFAULT_NUMVIEWS = 2;
+		 this.maxNumViews = 0;
+		 this.gl = gl;
+
+		 this.extensions = extensions;
+
+		 this.available = this.extensions.has( 'OCULUS_multiview' );
+
+		 if ( this.available ) {
+
+			 const extension = this.extensions.get( 'OCULUS_multiview' );
+
+			 this.maxNumViews = this.gl.getParameter( extension.MAX_VIEWS_OVR );
+
+			 this.mat4 = [];
+			 this.mat3 = [];
+			 this.cameraArray = [];
+
+			 for ( var i = 0; i < this.maxNumViews; i ++ ) {
+
+				 this.mat4[ i ] = new Matrix4();
+				 this.mat3[ i ] = new Matrix3();
+
+			 }
+
+		 }
+
+	 }
+
+	 //
+	 getCameraArray( camera ) {
+
+		 if ( camera.isArrayCamera ) return camera.cameras;
+
+		 this.cameraArray[ 0 ] = camera;
+
+		 return this.cameraArray;
+
+	 }
+
+	 updateCameraProjectionMatricesUniform( camera, uniforms ) {
+
+		 var cameras = this.getCameraArray( camera );
+
+		 for ( var i = 0; i < cameras.length; i ++ ) {
+
+			 this.mat4[ i ].copy( cameras[ i ].projectionMatrix );
+
+		 }
+
+		 uniforms.setValue( this.gl, 'projectionMatrices', this.mat4 );
+
+	 }
+
+	 updateCameraViewMatricesUniform( camera, uniforms ) {
+
+		 var cameras = this.getCameraArray( camera );
+
+		 for ( var i = 0; i < cameras.length; i ++ ) {
+
+			 this.mat4[ i ].copy( cameras[ i ].matrixWorldInverse );
+
+		 }
+
+		 uniforms.setValue( this.gl, 'viewMatrices', this.mat4 );
+
+	 }
+
+	 updateObjectMatricesUniforms( object, camera, uniforms ) {
+
+		 var cameras = this.getCameraArray( camera );
+
+		 for ( var i = 0; i < cameras.length; i ++ ) {
+
+			 this.mat4[ i ].multiplyMatrices( cameras[ i ].matrixWorldInverse, object.matrixWorld );
+			 this.mat3[ i ].getNormalMatrix( this.mat4[ i ] );
+
+		 }
+
+		 uniforms.setValue( this.gl, 'modelViewMatrices', this.mat4 );
+		 uniforms.setValue( this.gl, 'normalMatrices', this.mat3 );
+
+	 }
+
+}
+
 function WebGLObjects( gl, geometries, attributes, info ) {
 
 	let updateMap = new WeakMap();
@@ -6055,6 +6152,8 @@ function WebGLProgram( renderer, cacheKey, parameters, bindingStates ) {
 	let prefixVertex, prefixFragment;
 	let versionString = parameters.glslVersion ? '#version ' + parameters.glslVersion + '\n' : '';
 
+	const numMultiviewViews = parameters.numMultiviewViews;
+
 	if ( parameters.isRawShaderMaterial ) {
 
 		prefixVertex = [
@@ -6442,6 +6541,53 @@ function WebGLProgram( renderer, cacheKey, parameters, bindingStates ) {
 			'#define textureCubeGradEXT textureGrad'
 		].join( '\n' ) + '\n' + prefixFragment;
 
+		// Multiview
+
+		if ( numMultiviewViews > 0 ) {
+
+			// TODO: fix light transforms here?
+
+			prefixVertex = 	[
+				'#extension GL_OVR_multiview : require',
+				'layout(num_views = ' + numMultiviewViews + ') in;',
+				'#define VIEW_ID gl_ViewID_OVR'
+			].join( '\n' ) + '\n' + prefixVertex;
+
+			prefixVertex = prefixVertex.replace(
+				[
+					'uniform mat4 modelViewMatrix;',
+					'uniform mat4 projectionMatrix;',
+					'uniform mat4 viewMatrix;',
+					'uniform mat3 normalMatrix;'
+				].join( '\n' ),
+				[
+					'uniform mat4 modelViewMatrices[' + numMultiviewViews + '];',
+					'uniform mat4 projectionMatrices[' + numMultiviewViews + '];',
+					'uniform mat4 viewMatrices[' + numMultiviewViews + '];',
+					'uniform mat3 normalMatrices[' + numMultiviewViews + '];',
+
+					'#define modelViewMatrix modelViewMatrices[VIEW_ID]',
+					'#define projectionMatrix projectionMatrices[VIEW_ID]',
+					'#define viewMatrix viewMatrices[VIEW_ID]',
+					'#define normalMatrix normalMatrices[VIEW_ID]'
+				].join( '\n' )
+			);
+
+			prefixFragment = [
+				'#extension GL_OVR_multiview : require',
+				'#define VIEW_ID gl_ViewID_OVR'
+			].join( '\n' ) + '\n' + prefixFragment;
+
+			prefixFragment = prefixFragment.replace(
+				'uniform mat4 viewMatrix;',
+				[
+					'uniform mat4 viewMatrices[' + numMultiviewViews + '];',
+					'#define viewMatrix viewMatrices[VIEW_ID]'
+				].join( '\n' )
+			);
+
+		}
+
 	}
 
 	const vertexGlsl = versionString + prefixVertex + vertexShader;
@@ -6634,6 +6780,7 @@ function WebGLProgram( renderer, cacheKey, parameters, bindingStates ) {
 	this.program = program;
 	this.vertexShader = glVertexShader;
 	this.fragmentShader = glFragmentShader;
+	this.numMultiviewViews = numMultiviewViews;
 
 	return this;
 
@@ -6866,6 +7013,8 @@ function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities
 		const currentRenderTarget = renderer.getRenderTarget();
 		const reverseDepthBuffer = renderer.state.buffers.depth.getReversed();
 
+		const numMultiviewViews = currentRenderTarget && currentRenderTarget.isWebGLMultiviewRenderTarget ? currentRenderTarget.numViews : 0;
+
 		const IS_INSTANCEDMESH = object.isInstancedMesh === true;
 		const IS_BATCHEDMESH = object.isBatchedMesh === true;
 
@@ -6955,6 +7104,7 @@ function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities
 			instancingMorph: IS_INSTANCEDMESH && object.morphTexture !== null,
 
 			supportsVertexTextures: SUPPORTS_VERTEX_TEXTURES,
+			numMultiviewViews: numMultiviewViews,
 			outputColorSpace: ( currentRenderTarget === null ) ? renderer.outputColorSpace : ( currentRenderTarget.isXRRenderTarget === true ? currentRenderTarget.texture.colorSpace : LinearSRGBColorSpace ),
 			alphaToCoverage: !! material.alphaToCoverage,
 
@@ -7318,6 +7468,8 @@ function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities
 		if ( parameters.decodeVideoTextureEmissive )
 			_programLayers.enable( 20 );
 		if ( parameters.alphaToCoverage )
+			_programLayers.enable( 21 );
+		if ( parameters.numMultiviewViews )
 			_programLayers.enable( 21 );
 
 		array.push( _programLayers.mask );
@@ -10116,12 +10268,16 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 	const multisampledRTTExt = extensions.has( 'WEBGL_multisampled_render_to_texture' ) ? extensions.get( 'WEBGL_multisampled_render_to_texture' ) : null;
 	const supportsInvalidateFramebuffer = typeof navigator === 'undefined' ? false : /OculusBrowser/g.test( navigator.userAgent );
+	const multiviewExt = extensions.has( 'OCULUS_multiview' ) ? extensions.get( 'OCULUS_multiview' ) : null;
 
 	const _imageDimensions = new Vector2();
 	const _videoTextures = new WeakMap();
 	let _canvas;
 
 	const _sources = new WeakMap(); // maps WebglTexture objects to instances of Source
+
+	let _deferredUploads = [];
+	let _deferTextureUploads = false;
 
 	// cordova iOS (as of 5.0) still uses UIWebView, which provides OffscreenCanvas,
 	// also OffscreenCanvas.getContext("webgl"), but not OffscreenCanvas.getContext("2d")!
@@ -10637,8 +10793,11 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			} else {
 
-				uploadTexture( textureProperties, texture, slot );
-				return;
+				if ( uploadTexture( textureProperties, texture, slot ) ) {
+
+					return;
+
+				}
 
 			}
 
@@ -10847,7 +11006,44 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 	}
 
+	function setDeferTextureUploads( deferFlag ) {
+
+		_deferTextureUploads = deferFlag;
+
+	}
+
+	function runDeferredUploads() {
+
+		const previousDeferSetting = _deferTextureUploads;
+		_deferTextureUploads = false;
+
+		for ( const upload of _deferredUploads ) {
+
+			uploadTexture( upload.textureProperties, upload.texture, upload.slot );
+			upload.texture.isPendingDeferredUpload = false;
+
+		}
+
+		_deferredUploads = [];
+
+		_deferTextureUploads = previousDeferSetting;
+
+	}
+
 	function uploadTexture( textureProperties, texture, slot ) {
+
+		if ( _deferTextureUploads ) {
+
+			if ( ! texture.isPendingDeferredUpload ) {
+
+				texture.isPendingDeferredUpload = true;
+				_deferredUploads.push( { textureProperties: textureProperties, texture: texture, slot: slot } );
+
+			}
+
+			return false;
+
+		}
 
 		let textureType = _gl.TEXTURE_2D;
 
@@ -11278,6 +11474,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 		}
 
 		textureProperties.__version = texture.version;
+		return true;
 
 	}
 
@@ -11536,7 +11733,11 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 			const width = Math.max( 1, renderTarget.width >> level );
 			const height = Math.max( 1, renderTarget.height >> level );
 
-			if ( textureTarget === _gl.TEXTURE_3D || textureTarget === _gl.TEXTURE_2D_ARRAY ) {
+			if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+				state.texStorage3D( _gl.TEXTURE_2D_ARRAY, 0, glInternalFormat, renderTarget.width, renderTarget.height, renderTarget.numViews );
+
+			} else if ( textureTarget === _gl.TEXTURE_3D || textureTarget === _gl.TEXTURE_2D_ARRAY ) {
 
 				state.texImage3D( textureTarget, level, glInternalFormat, width, height, renderTarget.depth, 0, glFormat, glType, null );
 
@@ -11550,13 +11751,31 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		state.bindFramebuffer( _gl.FRAMEBUFFER, framebuffer );
 
-		if ( useMultisampledRTT( renderTarget ) ) {
+		const multisampled = useMultisampledRTT( renderTarget );
 
-			multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, attachment, textureTarget, textureProperties.__webglTexture, 0, getRenderTargetSamples( renderTarget ) );
+		if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+			if ( multisampled ) {
+
+				multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, _gl.COLOR_ATTACHMENT0, textureProperties.__webglTexture, 0, getRenderTargetSamples( renderTarget ), 0, renderTarget.numViews );
+
+			} else {
+
+				multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, _gl.COLOR_ATTACHMENT0, textureProperties.__webglTexture, 0, 0, renderTarget.numViews );
+
+			}
 
 		} else if ( textureTarget === _gl.TEXTURE_2D || ( textureTarget >= _gl.TEXTURE_CUBE_MAP_POSITIVE_X && textureTarget <= _gl.TEXTURE_CUBE_MAP_NEGATIVE_Z ) ) { // see #24753
 
-			_gl.framebufferTexture2D( _gl.FRAMEBUFFER, attachment, textureTarget, textureProperties.__webglTexture, level );
+			if ( multisampled ) {
+
+				multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, attachment, textureTarget, textureProperties.__webglTexture, 0, getRenderTargetSamples( renderTarget ) );
+
+			} else {
+
+				_gl.framebufferTexture2D( _gl.FRAMEBUFFER, attachment, textureTarget, textureProperties.__webglTexture, level );
+
+			}
 
 		}
 
@@ -11569,7 +11788,59 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		_gl.bindRenderbuffer( _gl.RENDERBUFFER, renderbuffer );
 
-		if ( renderTarget.depthBuffer ) {
+		if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+			const useMultisample = useMultisampledRTT( renderTarget );
+			const numViews = renderTarget.numViews;
+
+			const depthTexture = renderTarget.depthTexture;
+			let glInternalFormat = _gl.DEPTH_COMPONENT24;
+			let glDepthAttachment = _gl.DEPTH_ATTACHMENT;
+
+			if ( depthTexture && depthTexture.isDepthTexture ) {
+
+				if ( depthTexture.type === FloatType ) {
+
+					glInternalFormat = _gl.DEPTH_COMPONENT32F;
+
+				} else if ( depthTexture.type === UnsignedInt248Type ) {
+
+					glInternalFormat = _gl.DEPTH24_STENCIL8;
+					glDepthAttachment = _gl.DEPTH_STENCIL_ATTACHMENT;
+
+				}
+
+				// we're defaulting to _gl.DEPTH_COMPONENT24 so don't assign here
+				// or else DeepScan will complain
+
+				// else if ( depthTexture.type === UnsignedIntType ) {
+
+				// 	glInternalFormat = _gl.DEPTH_COMPONENT24;
+
+				// }
+
+			}
+
+			let depthStencilTexture = properties.get( renderTarget.depthTexture ).__webglTexture;
+			if ( depthStencilTexture === undefined ) {
+
+				depthStencilTexture = _gl.createTexture();
+				_gl.bindTexture( _gl.TEXTURE_2D_ARRAY, depthStencilTexture );
+				_gl.texStorage3D( _gl.TEXTURE_2D_ARRAY, 1, glInternalFormat, renderTarget.width, renderTarget.height, numViews );
+
+			}
+
+			if ( useMultisample ) {
+
+				multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, glDepthAttachment, depthStencilTexture, 0, getRenderTargetSamples( renderTarget ), 0, numViews );
+
+			} else {
+
+				multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, glDepthAttachment, depthStencilTexture, 0, 0, numViews );
+
+			}
+
+		} else if ( renderTarget.depthBuffer ) {
 
 			// retrieve the depth attachment types
 			const depthTexture = renderTarget.depthTexture;
@@ -11659,38 +11930,85 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		}
 
-		setTexture2D( renderTarget.depthTexture, 0 );
+		if ( renderTarget.depthTexture.image.depth != 1 ) {
+
+			setTexture2DArray( renderTarget.depthTexture, 0 );
+
+		} else {
+
+			setTexture2D( renderTarget.depthTexture, 0 );
+
+		}
 
 		const webglDepthTexture = textureProperties.__webglTexture;
 		const samples = getRenderTargetSamples( renderTarget );
 
-		if ( renderTarget.depthTexture.format === DepthFormat ) {
+		if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
 
-			if ( useMultisampledRTT( renderTarget ) ) {
+			const useMultisample = useMultisampledRTT( renderTarget );
+			const numViews = renderTarget.numViews;
 
-				multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
+			if ( renderTarget.depthTexture.format === DepthFormat ) {
+
+				if ( useMultisample ) {
+
+					multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, webglDepthTexture, 0, samples, 0, numViews );
+
+				} else {
+
+					multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, webglDepthTexture, 0, 0, numViews );
+
+				}
+
+			} else if ( renderTarget.depthTexture.format === DepthStencilFormat ) {
+
+				if ( useMultisample ) {
+
+					multiviewExt.framebufferTextureMultisampleMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, webglDepthTexture, 0, samples, 0, numViews );
+
+				} else {
+
+					multiviewExt.framebufferTextureMultiviewOVR( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, webglDepthTexture, 0, 0, numViews );
+
+				}
 
 			} else {
 
-				_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
-
-			}
-
-		} else if ( renderTarget.depthTexture.format === DepthStencilFormat ) {
-
-			if ( useMultisampledRTT( renderTarget ) ) {
-
-				multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
-
-			} else {
-
-				_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
+				throw new Error( 'Unknown depthTexture format' );
 
 			}
 
 		} else {
 
-			throw new Error( 'Unknown depthTexture format' );
+			if ( renderTarget.depthTexture.format === DepthFormat ) {
+
+				if ( useMultisampledRTT( renderTarget ) ) {
+
+					multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
+
+				} else {
+
+					_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
+
+				}
+
+			} else if ( renderTarget.depthTexture.format === DepthStencilFormat ) {
+
+				if ( useMultisampledRTT( renderTarget ) ) {
+
+					multisampledRTTExt.framebufferTexture2DMultisampleEXT( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0, samples );
+
+				} else {
+
+					_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.DEPTH_STENCIL_ATTACHMENT, _gl.TEXTURE_2D, webglDepthTexture, 0 );
+
+				}
+
+			} else {
+
+				throw new Error( 'Unknown depthTexture format' );
+
+			}
 
 		}
 
@@ -12005,6 +12323,12 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 			}
 
+			if ( renderTarget.isWebGLMultiviewRenderTarget === true ) {
+
+				glTextureType = _gl.TEXTURE_2D_ARRAY;
+
+			}
+
 			state.bindTexture( glTextureType, textureProperties.__webglTexture );
 			setTextureParameters( glTextureType, texture );
 
@@ -12034,9 +12358,9 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		// Setup depth and stencil buffers
 
-		if ( renderTarget.depthBuffer ) {
+		if ( renderTarget.depthBuffer || renderTarget.isWebGLMultiviewRenderTarget === true ) {
 
-			setupDepthRenderbuffer( renderTarget );
+			this.setupDepthRenderbuffer( renderTarget );
 
 		}
 
@@ -12281,12 +12605,16 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 	this.setTexture3D = setTexture3D;
 	this.setTextureCube = setTextureCube;
 	this.rebindTextures = rebindTextures;
+	this.uploadTexture = uploadTexture;
 	this.setupRenderTarget = setupRenderTarget;
 	this.updateRenderTargetMipmap = updateRenderTargetMipmap;
 	this.updateMultisampleRenderTarget = updateMultisampleRenderTarget;
+	this.setupDepthTexture = setupDepthTexture;
 	this.setupDepthRenderbuffer = setupDepthRenderbuffer;
 	this.setupFrameBufferTexture = setupFrameBufferTexture;
 	this.useMultisampledRTT = useMultisampledRTT;
+	this.runDeferredUploads = runDeferredUploads;
+	this.setDeferTextureUploads = setDeferTextureUploads;
 
 }
 
@@ -12499,6 +12827,39 @@ function WebGLUtils( gl, extensions ) {
 
 }
 
+/**
+ * @author fernandojsg / http://fernandojsg.com
+ * @author Takahiro https://github.com/takahirox
+ */
+
+
+class WebGLMultiviewRenderTarget extends WebGLRenderTarget {
+
+	constructor( width, height, numViews, options = {} ) {
+
+		super( width, height, options );
+
+		this.depthBuffer = false;
+		this.stencilBuffer = false;
+
+		this.numViews = numViews;
+
+	}
+
+	copy( source ) {
+
+		super.copy( source );
+
+		this.numViews = source.numViews;
+
+		return this;
+
+	}
+
+}
+
+WebGLMultiviewRenderTarget.prototype.isWebGLMultiviewRenderTarget = true;
+
 const _occlusion_vertex = `
 void main() {
 
@@ -12669,7 +13030,7 @@ class WebXRManager extends EventDispatcher {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGL2RenderingContext} gl - The rendering context.
 	 */
-	constructor( renderer, gl ) {
+	constructor( renderer, gl, extensions, useMultiview ) {
 
 		super();
 
@@ -12678,6 +13039,7 @@ class WebXRManager extends EventDispatcher {
 		let session = null;
 
 		let framebufferScaleFactor = 1.0;
+		var poseTarget = null;
 
 		let referenceSpace = null;
 		let referenceSpaceType = 'local-floor';
@@ -12686,6 +13048,8 @@ class WebXRManager extends EventDispatcher {
 		let customReferenceSpace = null;
 
 		let pose = null;
+		var layers = [];
+
 		let glBinding = null;
 		let glProjLayer = null;
 		let glBaseLayer = null;
@@ -12718,8 +13082,6 @@ class WebXRManager extends EventDispatcher {
 		let _currentDepthNear = null;
 		let _currentDepthFar = null;
 
-		//
-
 		/**
 		 * Whether the manager's XR camera should be automatically updated or not.
 		 *
@@ -12737,6 +13099,8 @@ class WebXRManager extends EventDispatcher {
 		 */
 		this.enabled = false;
 
+		this.layersEnabled = false;
+
 		/**
 		 * Whether XR presentation is active or not.
 		 *
@@ -12745,6 +13109,13 @@ class WebXRManager extends EventDispatcher {
 		 * @default false
 		 */
 		this.isPresenting = false;
+		this.isMultiview = false;
+
+		this.getCameraPose = function ( ) {
+
+			return pose;
+
+		};
 
 		/**
 		 * Returns a group representing the `target ray` space of the XR controller.
@@ -12875,6 +13246,8 @@ class WebXRManager extends EventDispatcher {
 
 			// restore framebuffer/rendering state
 
+			scope.isPresenting = false;
+
 			renderer.setRenderTarget( initialRenderTarget );
 
 			glBaseLayer = null;
@@ -12886,8 +13259,6 @@ class WebXRManager extends EventDispatcher {
 			//
 
 			animation.stop();
-
-			scope.isPresenting = false;
 
 			renderer.setPixelRatio( currentPixelRatio );
 			renderer.setSize( currentSize.width, currentSize.height, false );
@@ -12991,6 +13362,12 @@ class WebXRManager extends EventDispatcher {
 
 		};
 
+		this.getRenderTarget = function () {
+
+			return newRenderTarget;
+
+		};
+
 		/**
 		 * Returns the current XR session.
 		 *
@@ -13086,11 +13463,19 @@ class WebXRManager extends EventDispatcher {
 
 					}
 
+					scope.isMultiview = useMultiview && extensions.has( 'OCULUS_multiview' );
+
 					const projectionlayerInit = {
 						colorFormat: gl.RGBA8,
 						depthFormat: glDepthFormat,
 						scaleFactor: framebufferScaleFactor
 					};
+
+					if ( scope.isMultiview ) {
+
+						projectionlayerInit.textureType = 'texture-array';
+
+					}
 
 					glBinding = new XRWebGLBinding( session, gl );
 
@@ -13101,19 +13486,33 @@ class WebXRManager extends EventDispatcher {
 					renderer.setPixelRatio( 1 );
 					renderer.setSize( glProjLayer.textureWidth, glProjLayer.textureHeight, false );
 
-					newRenderTarget = new WebGLRenderTarget(
-						glProjLayer.textureWidth,
-						glProjLayer.textureHeight,
-						{
-							format: RGBAFormat,
-							type: UnsignedByteType,
-							depthTexture: new DepthTexture( glProjLayer.textureWidth, glProjLayer.textureHeight, depthType, undefined, undefined, undefined, undefined, undefined, undefined, depthFormat ),
-							stencilBuffer: attributes.stencil,
-							colorSpace: renderer.outputColorSpace,
-							samples: attributes.antialias ? 4 : 0,
-							resolveDepthBuffer: ( glProjLayer.ignoreDepthValues === false ),
-							resolveStencilBuffer: ( glProjLayer.ignoreDepthValues === false )
-						} );
+					const renderTargetOptions = {
+						format: RGBAFormat,
+						type: UnsignedByteType,
+						depthTexture: new DepthTexture( glProjLayer.textureWidth, glProjLayer.textureHeight, depthType, undefined, undefined, undefined, undefined, undefined, undefined, depthFormat ),
+						stencilBuffer: attributes.stencil,
+						colorSpace: renderer.outputColorSpace,
+						samples: attributes.antialias ? 4 : 0,
+						resolveDepthBuffer: ( glProjLayer.ignoreDepthValues === false ),
+						resolveStencilBuffer: ( glProjLayer.ignoreDepthValues === false )
+					};
+
+					if ( scope.isMultiview ) {
+
+						const extension = extensions.get( 'OCULUS_multiview' );
+
+						this.maxNumViews = gl.getParameter( extension.MAX_VIEWS_OVR );
+
+						newRenderTarget = new WebGLMultiviewRenderTarget( glProjLayer.textureWidth, glProjLayer.textureHeight, 2, renderTargetOptions );
+
+					} else {
+
+						newRenderTarget = new WebGLRenderTarget(
+							glProjLayer.textureWidth,
+							glProjLayer.textureHeight,
+							renderTargetOptions );
+
+					}
 
 				}
 
@@ -13147,7 +13546,28 @@ class WebXRManager extends EventDispatcher {
 				return session.environmentBlendMode;
 
 			}
+		};
 
+		this.addLayer = function(layer) {
+			if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
+
+			layers.push( layer );
+			this.updateLayers();
+		};
+
+		this.removeLayer = function(layer) {
+
+			layers.splice( layers.indexOf(layer), 1 );
+			if (!window.XRWebGLBinding || !this.layersEnabled || !session) { return; }
+
+			this.updateLayers();
+		};
+
+		this.updateLayers = function() {
+			var layersCopy = layers.map(function (x) { return x; });
+
+			layersCopy.unshift( session.renderState.layers[0] );
+			session.updateRenderState( { layers: layersCopy } );
 		};
 
 		/**
@@ -13321,6 +13741,12 @@ class WebXRManager extends EventDispatcher {
 
 		}
 
+		this.setPoseTarget = function ( object ) {
+
+			if ( object !== undefined ) poseTarget = object;
+
+		};
+
 		/**
 		 * Updates the state of the XR camera. Use this method on app level if you
 		 * set cameraAutoUpdate` to `false`. The method requires the non-XR
@@ -13365,8 +13791,9 @@ class WebXRManager extends EventDispatcher {
 			cameraR.layers.mask = camera.layers.mask | 0b100;
 			cameraXR.layers.mask = cameraL.layers.mask | cameraR.layers.mask;
 
-			const parent = camera.parent;
 			const cameras = cameraXR.cameras;
+			var object = poseTarget || camera;
+			const parent = object.parent;
 
 			updateCamera( cameraXR, parent );
 
@@ -13390,28 +13817,28 @@ class WebXRManager extends EventDispatcher {
 
 			}
 
-			// update user camera and its children
-
-			updateUserCamera( camera, cameraXR, parent );
+			updateUserCamera( camera, cameraXR, object );
 
 		};
 
-		function updateUserCamera( camera, cameraXR, parent ) {
+		function updateUserCamera( camera, cameraXR, object ) {
 
-			if ( parent === null ) {
+			cameraXR.matrixWorld.decompose( cameraXR.position, cameraXR.quaternion, cameraXR.scale );
 
-				camera.matrix.copy( cameraXR.matrixWorld );
+			if ( object.parent === null ) {
+
+				object.matrix.copy( cameraXR.matrixWorld );
 
 			} else {
 
-				camera.matrix.copy( parent.matrixWorld );
-				camera.matrix.invert();
-				camera.matrix.multiply( cameraXR.matrixWorld );
+				object.matrix.copy( object.parent.matrixWorld );
+				object.matrix.invert();
+				object.matrix.multiply( cameraXR.matrixWorld );
 
 			}
 
-			camera.matrix.decompose( camera.position, camera.quaternion, camera.scale );
-			camera.updateMatrixWorld( true );
+			object.matrix.decompose( object.position, object.quaternion, object.scale );
+			object.updateMatrixWorld( true );
 
 			camera.projectionMatrix.copy( cameraXR.projectionMatrix );
 			camera.projectionMatrixInverse.copy( cameraXR.projectionMatrixInverse );
@@ -14664,6 +15091,7 @@ class WebGLRenderer {
 			powerPreference = 'default',
 			failIfMajorPerformanceCaveat = false,
 			reverseDepthBuffer = false,
+			multiviewStereo = false,
 		} = parameters;
 
 		/**
@@ -14976,6 +15404,7 @@ class WebGLRenderer {
 		let extensions, capabilities, state, info;
 		let properties, textures, cubemaps, cubeuvmaps, attributes, geometries, objects;
 		let programCache, materials, renderLists, renderStates, clipping, shadowMap;
+		let multiview;
 
 		let background, morphtargets, bufferRenderer, indexedBufferRenderer;
 
@@ -15014,6 +15443,7 @@ class WebGLRenderer {
 			renderLists = new WebGLRenderLists();
 			renderStates = new WebGLRenderStates( extensions );
 			background = new WebGLBackground( _this, cubemaps, cubeuvmaps, state, objects, _alpha, premultipliedAlpha );
+			multiview = new WebGLMultiview( _this, extensions, _gl );
 			shadowMap = new WebGLShadowMap( _this, objects, capabilities );
 			uniformsGroups = new WebGLUniformsGroups( _gl, info, capabilities, state );
 
@@ -16220,11 +16650,21 @@ class WebGLRenderer {
 
 				if ( _renderBackground ) background.render( scene );
 
-				for ( let i = 0, l = cameras.length; i < l; i ++ ) {
+				if ( xr.enabled && xr.isMultiview ) {
 
-					const camera2 = cameras[ i ];
+					textures.setDeferTextureUploads( true );
 
-					renderScene( currentRenderList, scene, camera2, camera2.viewport );
+					renderScene( currentRenderList, scene, camera, camera.cameras[ 0 ].viewport );
+
+				} else {
+
+					for ( let i = 0, l = cameras.length; i < l; i ++ ) {
+
+						const camera2 = cameras[ i ];
+
+						renderScene( currentRenderList, scene, camera2, camera2.viewport );
+
+					}
 
 				}
 
@@ -16756,6 +17196,7 @@ class WebGLRenderer {
 			materialProperties.vertexAlphas = parameters.vertexAlphas;
 			materialProperties.vertexTangents = parameters.vertexTangents;
 			materialProperties.toneMapping = parameters.toneMapping;
+			materialProperties.numMultiviewViews = parameters.numMultiviewViews;
 
 		}
 
@@ -16786,6 +17227,8 @@ class WebGLRenderer {
 				}
 
 			}
+
+			const numMultiviewViews = _currentRenderTarget && _currentRenderTarget.isWebGLMultiviewRenderTarget ? _currentRenderTarget.numViews : 0;
 
 			const morphAttribute = geometry.morphAttributes.position || geometry.morphAttributes.normal || geometry.morphAttributes.color;
 			const morphTargetsCount = ( morphAttribute !== undefined ) ? morphAttribute.length : 0;
@@ -16914,6 +17357,10 @@ class WebGLRenderer {
 
 					needsProgramChange = true;
 
+				} else if ( materialProperties.numMultiviewViews !== numMultiviewViews ) {
+
+					needsProgramChange = true;
+
 				}
 
 			} else {
@@ -16960,24 +17407,33 @@ class WebGLRenderer {
 
 				// common camera uniforms
 
-				const reverseDepthBuffer = state.buffers.depth.getReversed();
+				if ( program.numMultiviewViews > 0 ) {
 
-				if ( reverseDepthBuffer ) {
-
-					_currentProjectionMatrix.copy( camera.projectionMatrix );
-
-					toNormalizedProjectionMatrix( _currentProjectionMatrix );
-					toReversedProjectionMatrix( _currentProjectionMatrix );
-
-					p_uniforms.setValue( _gl, 'projectionMatrix', _currentProjectionMatrix );
+					multiview.updateCameraProjectionMatricesUniform( camera, p_uniforms );
+					multiview.updateCameraViewMatricesUniform( camera, p_uniforms );
 
 				} else {
 
-					p_uniforms.setValue( _gl, 'projectionMatrix', camera.projectionMatrix );
+					const reverseDepthBuffer = state.buffers.depth.getReversed();
+
+					if ( reverseDepthBuffer ) {
+
+						_currentProjectionMatrix.copy( camera.projectionMatrix );
+
+						toNormalizedProjectionMatrix( _currentProjectionMatrix );
+						toReversedProjectionMatrix( _currentProjectionMatrix );
+
+						p_uniforms.setValue( _gl, 'projectionMatrix', _currentProjectionMatrix );
+
+					} else {
+
+						p_uniforms.setValue( _gl, 'projectionMatrix', camera.projectionMatrix );
+
+					}
+
+					p_uniforms.setValue( _gl, 'viewMatrix', camera.matrixWorldInverse );
 
 				}
-
-				p_uniforms.setValue( _gl, 'viewMatrix', camera.matrixWorldInverse );
 
 				const uCamPos = p_uniforms.map.cameraPosition;
 
@@ -17139,8 +17595,17 @@ class WebGLRenderer {
 
 			// common matrices
 
-			p_uniforms.setValue( _gl, 'modelViewMatrix', object.modelViewMatrix );
-			p_uniforms.setValue( _gl, 'normalMatrix', object.normalMatrix );
+			if ( program.numMultiviewViews > 0 ) {
+
+				multiview.updateObjectMatricesUniforms( object, camera, p_uniforms );
+
+			} else {
+
+				p_uniforms.setValue( _gl, 'modelViewMatrix', object.modelViewMatrix );
+				p_uniforms.setValue( _gl, 'normalMatrix', object.normalMatrix );
+
+			}
+
 			p_uniforms.setValue( _gl, 'modelMatrix', object.matrixWorld );
 
 			// UBOs
@@ -17190,6 +17655,32 @@ class WebGLRenderer {
 
 		}
 
+		this.setTexture2D = ( function () {
+
+			var warned = false;
+
+			// backwards compatibility: peel texture.texture
+			return function setTexture2D( texture, slot ) {
+
+				if ( texture && texture.isWebGLRenderTarget ) {
+
+					if ( ! warned ) {
+
+						console.warn( "THREE.WebGLRenderer.setTexture2D: don't use render targets as textures. Use their .texture property instead." );
+						warned = true;
+
+					}
+
+					texture = texture.texture;
+
+				}
+
+				textures.setTexture2D( texture, slot );
+
+			};
+
+		}() );
+
 		/**
 		 * Returns the active cube face.
 		 *
@@ -17229,7 +17720,7 @@ class WebGLRenderer {
 			const renderTargetProperties = properties.get( renderTarget );
 
 			renderTargetProperties.__autoAllocateDepthBuffer = renderTarget.resolveDepthBuffer === false;
-			if ( renderTargetProperties.__autoAllocateDepthBuffer === false ) {
+			if ( ! renderTargetProperties.__autoAllocateDepthBuffer === false && ( ! _currentRenderTarget || ! _currentRenderTarget.isWebGLMultiviewRenderTarget ) ) {
 
 				// The multisample_render_to_texture extension doesn't work properly if there
 				// are midframe flushes and an external depth buffer. Disable use of the extension.
@@ -17264,6 +17755,13 @@ class WebGLRenderer {
 		 * @param {number} [activeMipmapLevel=0] - The active mipmap level.
 		 */
 		this.setRenderTarget = function ( renderTarget, activeCubeFace = 0, activeMipmapLevel = 0 ) {
+
+			// Render to base layer instead of canvas in WebXR
+			if ( renderTarget === null && this.xr.isPresenting ) {
+
+				renderTarget = this.xr.getRenderTarget();
+
+			}
 
 			_currentRenderTarget = renderTarget;
 			_currentActiveCubeFace = activeCubeFace;
