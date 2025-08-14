@@ -853,6 +853,8 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 
 		}
 
+	}
+
 	function setDeferTextureUploads( deferFlag ) {
 
 		_deferTextureUploads = deferFlag;

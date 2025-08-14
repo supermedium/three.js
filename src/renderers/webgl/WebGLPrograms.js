@@ -567,7 +567,7 @@ function WebGLPrograms( renderer, cubemaps, cubeuvmaps, extensions, capabilities
 		if ( parameters.alphaToCoverage )
 			_programLayers.enable( 21 );
 		if ( parameters.numMultiviewViews )
-			_programLayers.enable( 21 );
+			_programLayers.enable( 22 );
 
 		array.push( _programLayers.mask );
 
