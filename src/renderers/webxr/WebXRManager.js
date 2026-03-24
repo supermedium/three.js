@@ -12,6 +12,7 @@ import { WebXRController } from './WebXRController.js';
 import { DepthTexture } from '../../textures/DepthTexture.js';
 import { DepthFormat, DepthStencilFormat, RGBAFormat, UnsignedByteType, UnsignedIntType, UnsignedInt248Type } from '../../constants.js';
 import { WebXRDepthSensing } from './WebXRDepthSensing.js';
+import { WebXRSpaceWarp } from './WebXRSpaceWarp.js';
 
 /**
  * This class represents an abstraction of the WebXR Device API and is
@@ -82,6 +83,8 @@ class WebXRManager extends EventDispatcher {
 		let _currentDepthNear = null;
 		let _currentDepthFar = null;
 
+		this.spaceWarp = new WebXRSpaceWarp( renderer, gl );
+
 		/**
 		 * Whether the manager's XR camera should be automatically updated or not.
 		 *
@@ -110,6 +113,7 @@ class WebXRManager extends EventDispatcher {
 		 */
 		this.isPresenting = false;
 		this.isMultiview = false;
+		this.isSpaceWarp = false;
 
 		this.getCameraPose = function ( ) {
 
@@ -241,6 +245,8 @@ class WebXRManager extends EventDispatcher {
 
 			_currentDepthNear = null;
 			_currentDepthFar = null;
+
+			if ( scope.spaceWarp ) scope.spaceWarp.dispose();
 
 			depthSensing.reset();
 
@@ -465,6 +471,7 @@ class WebXRManager extends EventDispatcher {
 					}
 
 					scope.isMultiview = useMultiview && extensions.has( 'OCULUS_multiview' );
+					scope.isSpaceWarp = scope.isMultiview && ( renderer.spaceWarp === true );
 
 					const projectionlayerInit = {
 						colorFormat: gl.RGBA8,
@@ -943,6 +950,7 @@ class WebXRManager extends EventDispatcher {
 
 			pose = frame.getViewerPose( customReferenceSpace || referenceSpace );
 			xrFrame = frame;
+			let glSubImage = null;
 
 			if ( pose !== null ) {
 
@@ -978,20 +986,8 @@ class WebXRManager extends EventDispatcher {
 
 					} else {
 
-						const glSubImage = glBinding.getViewSubImage( glProjLayer, view );
+						glSubImage = glBinding.getViewSubImage( glProjLayer, view );
 						viewport = glSubImage.viewport;
-
-						// For side-by-side projection, we only produce a single texture for both eyes.
-						if ( i === 0 ) {
-
-							renderer.setRenderTargetTextures(
-								newRenderTarget,
-								glSubImage.colorTexture,
-								glSubImage.depthStencilTexture );
-
-							renderer.setRenderTarget( newRenderTarget );
-
-						}
 
 					}
 
@@ -1024,6 +1020,18 @@ class WebXRManager extends EventDispatcher {
 						cameraXR.cameras.push( camera );
 
 					}
+
+				}
+
+				// Setup multiview render target for the main color pass.
+				if ( glSubImage ) {
+
+					renderer.setRenderTargetTextures(
+						newRenderTarget,
+						glSubImage.colorTexture,
+						glSubImage.depthStencilTexture );
+
+					renderer.setRenderTarget( newRenderTarget );
 
 				}
 
@@ -1064,6 +1072,13 @@ class WebXRManager extends EventDispatcher {
 			}
 
 			if ( onAnimationFrameCallback ) onAnimationFrameCallback( time, frame );
+
+			// Run motion vector pass after the app callback so current-frame transforms are up to date.
+			if ( scope.isSpaceWarp && glSubImage ) {
+
+				scope.spaceWarp.render( glSubImage, cameraXR );
+
+			}
 
 			if ( frame.detectedPlanes ) {
 

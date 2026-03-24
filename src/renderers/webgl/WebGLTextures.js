@@ -852,6 +852,7 @@ function WebGLTextures( _gl, extensions, state, properties, capabilities, utils,
 			_gl.pixelStorei( _gl.UNPACK_SKIP_ROWS, currentUnpackSkipRows );
 
 		}
+	}
 
 	function setDeferTextureUploads( deferFlag ) {
 

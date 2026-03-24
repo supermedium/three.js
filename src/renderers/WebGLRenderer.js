@@ -524,7 +524,7 @@ class WebGLRenderer {
 
 		// xr
 
-		const xr = new WebXRManager( _this, _gl );
+		const xr = new WebXRManager( _this, _gl, extensions, multiviewStereo );
 
 		/**
 		 * A reference to the XR manager.
@@ -1687,6 +1687,8 @@ class WebGLRenderer {
 
 			if ( scene.isScene === true ) scene.onAfterRender( _this, scene, camera );
 
+			textures.runDeferredUploads();
+
 			// _gl.finish();
 
 			bindingStates.resetDefaultState();
@@ -2709,9 +2711,15 @@ class WebGLRenderer {
 		this.setRenderTargetTextures = function ( renderTarget, colorTexture, depthTexture ) {
 
 			const renderTargetProperties = properties.get( renderTarget );
+			if ( xr.isSpaceWarp === true ) {
+
+				renderTargetProperties.__autoAllocateDepthBuffer = true;
+				renderTarget.resolveDepthBuffer = false;
+
+			}
 
 			renderTargetProperties.__autoAllocateDepthBuffer = renderTarget.resolveDepthBuffer === false;
-			if ( ! renderTargetProperties.__autoAllocateDepthBuffer === false && ( ! _currentRenderTarget || ! _currentRenderTarget.isWebGLMultiviewRenderTarget ) ) {
+			if ( ! renderTargetProperties.__autoAllocateDepthBuffer ) {
 
 				// The multisample_render_to_texture extension doesn't work properly if there
 				// are midframe flushes and an external depth buffer. Disable use of the extension.
